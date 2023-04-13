@@ -8,6 +8,9 @@ import NavBar from './components/NavBar';
 import SlideShow from './components/tempSlide';
 
 function App({ signOut }) {
+  React.useEffect(() => {
+    document.title = 'Sioux City Uploads';
+  }, []);
   const handleSignOut = () => {
     signOut();
   };
