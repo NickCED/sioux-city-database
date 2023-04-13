@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify8745e04749d24-staging-185033-authRole",
+      "UnauthRoleArn": "arn:aws:iam::552976204294:role/amplify-amplify8745e04749d24-staging-185033-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::552976204294:role/amplify-amplify8745e04749d24-staging-185033-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-amplify8745e04749d24-staging-185033-deployment",
+      "UnauthRoleName": "amplify-amplify8745e04749d24-staging-185033-unauthRole",
+      "StackName": "amplify-amplify8745e04749d24-staging-185033",
+      "StackId": "arn:aws:cloudformation:us-east-2:552976204294:stack/amplify-amplify8745e04749d24-staging-185033/934e3920-d7d0-11ed-93a3-0ac7fd8939bc",
+      "AmplifyAppId": "d1enb2fhs7o8vx"
+    },
+    "categories": {
+      "auth": {
+        "siouxcityupload9519fe5d": {}
+      },
+      "storage": {
+        "s3siouxcityuploadstorageced": {}
+      }
+    }
+  }
+}

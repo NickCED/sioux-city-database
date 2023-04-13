@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3siouxcityuploadstorageced",
+  "bucketName": "siouxcityupload-storage-ced",
+  "policyUUID": "ae2d8121",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
