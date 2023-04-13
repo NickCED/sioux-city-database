@@ -37,8 +37,18 @@
   }
 }
 
-.slick-slide img {
-  max-height: 50vh;
+.slick-slide {
+  max-height: 30vh;
   margin-left: 50px;
   border-radius: 5px;
+  -webkit-box-shadow: 0px 154px 52px -94px rgba(0, 0, 0, 0.28);
+  -moz-box-shadow: 0px 154px 52px -94px rgba(0, 0, 0, 0.28);
+  box-shadow: 0px 154px 52px -94px rgba(0, 0, 0, 0.4);
+}
+.slick-slide img {
+  max-height: 30vh;
+  border-radius: 5px;
+}
+.slick-list {
+  overflow: unset;
 }
