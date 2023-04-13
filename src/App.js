@@ -11,6 +11,9 @@ function App({ signOut }) {
   const handleSignOut = () => {
     signOut();
   };
+  setTimeout(() => {
+    document.querySelector('.sioux-city-uploads').style.opacity = 1;
+  }, 2500);
 
   return (
     <ThemeProvider>
@@ -18,7 +21,14 @@ function App({ signOut }) {
         <NavBar onSignOut={handleSignOut} />
       </View>
       <View>
-        <Card textAlign={'center'}>
+        <Card
+          textAlign={'center'}
+          className='sioux-city-uploads'
+          style={{
+            opacity: 0,
+            transition: 'opacity 2s ease-in-out',
+          }}
+        >
           <h1>Sioux City Uploads coming soon...</h1>
         </Card>
       </View>

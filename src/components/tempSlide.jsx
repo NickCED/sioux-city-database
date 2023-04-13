@@ -7,8 +7,7 @@ import { Storage } from 'aws-amplify';
 const SlideShow = () => {
   const [images, setImages] = useState([]);
   const [loadedCount, setLoadedCount] = useState(0);
-  const [canStart, setCanStart] = useState(false);
-  const [sliderInitialized, setSliderInitialized] = useState(false);
+
   const sliderRef = React.useRef(null);
 
   useEffect(() => {
@@ -45,10 +44,9 @@ const SlideShow = () => {
   useEffect(() => {
     // Set canStart flag once all images have loaded
     if (loadedCount === images.length) {
-      setCanStart(true);
-      document.getElementsByClassName('sliderDiv')[0].style.opacity = 1;
-
-      console.log('canStart: ', canStart);
+      setTimeout(() => {
+        document.querySelector('.sliderDiv').style.opacity = 1;
+      }, 5000);
     }
   }, [loadedCount, images]);
 
@@ -60,7 +58,7 @@ const SlideShow = () => {
     useTransform: true,
     centerMode: true,
     variableWidth: true,
-    initialSlide: 12,
+
     draggable: false,
     autoplay: true,
     autoplaySpeed: 500,
