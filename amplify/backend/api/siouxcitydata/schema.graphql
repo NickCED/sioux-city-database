@@ -1,0 +1,75 @@
+type School @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  logoUrl: String
+  description: String
+  sports: [SchoolSport] @hasMany
+  notes: String
+}
+
+type SchoolSport @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  description: String
+  school: String
+  sport: String
+  startYear: Int
+  endYear: Int
+  wins: [Win] @hasMany
+  images: [Image] @hasMany
+  notes: String
+}
+
+type ProfessionalSport @model @auth(rules: [{ allow: private }]) {
+  startYear: Int
+  endYear: Int
+  sportType: String
+  description: String
+  images: [Image] @hasMany
+  notes: String
+}
+
+type ProfessionalTeam @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  startYear: Int
+  endYear: Int
+  sportType: String
+  description: String
+  images: [Image] @hasMany
+  notes: String
+}
+
+type HallOfFame @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  inductionYear: Int
+  sport: String
+  description: String
+  notableAchievements: [String]
+  images: [Image] @hasMany
+  notes: String
+}
+
+type Venue @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  startYear: Int
+  endYear: Int
+  location: String
+  description: String
+  images: [Image] @hasMany
+  notes: String
+}
+
+type Sport @model @auth(rules: [{ allow: private }]) {
+  type: [String]
+}
+
+type Image @model @auth(rules: [{ allow: private }]) {
+  name: String!
+  url: String!
+}
+
+type Win @model @auth(rules: [{ allow: private }]) {
+  winTitle: String!
+  school: SchoolSport @belongsTo
+  year: Int
+  description: String
+  notes: String
+}
