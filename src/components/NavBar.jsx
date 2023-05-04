@@ -24,7 +24,6 @@ export default function NavBar(props) {
       direction='row'
       alignItems='center'
       display='flex'
-      flex={1}
       wrap={'wrap'}
       justifyContent='space-between'
       padding='0.5rem'
