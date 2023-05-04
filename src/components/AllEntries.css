@@ -1,0 +1,15 @@
+th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden;
+}
+
+tr.entries-tr:hover {
+  box-shadow: inset 0 0 0 2px #0d172b41;
+  transition: all 0.3s ease-in-out;
+}
+tr.entries-tr {
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+}

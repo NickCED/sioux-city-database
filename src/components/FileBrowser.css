@@ -1,0 +1,6 @@
+.drag-over {
+  border: 2px dashed #000000;
+  background-color: #9cc8fa;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
