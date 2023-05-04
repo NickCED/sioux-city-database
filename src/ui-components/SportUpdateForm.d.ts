@@ -15,14 +15,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type SportUpdateFormInputValues = {
     type?: string[];
+    createdBy?: string;
 };
 export declare type SportUpdateFormValidationValues = {
     type?: ValidationFunction<string>;
+    createdBy?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SportUpdateFormOverridesProps = {
     SportUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     type?: PrimitiveOverrideProps<TextFieldProps>;
+    createdBy?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SportUpdateFormProps = React.PropsWithChildren<{
     overrides?: SportUpdateFormOverridesProps | undefined | null;

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -16,13 +16,19 @@ export declare type SchoolCreateFormInputValues = {
     name?: string;
     logoUrl?: string;
     description?: string;
+    sportsIds?: string[];
     notes?: string;
+    createdBy?: string;
+    kioskReady?: boolean;
 };
 export declare type SchoolCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     logoUrl?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
+    sportsIds?: ValidationFunction<string>;
     notes?: ValidationFunction<string>;
+    createdBy?: ValidationFunction<string>;
+    kioskReady?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SchoolCreateFormOverridesProps = {
@@ -30,7 +36,10 @@ export declare type SchoolCreateFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     logoUrl?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
+    sportsIds?: PrimitiveOverrideProps<TextFieldProps>;
     notes?: PrimitiveOverrideProps<TextFieldProps>;
+    createdBy?: PrimitiveOverrideProps<TextFieldProps>;
+    kioskReady?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type SchoolCreateFormProps = React.PropsWithChildren<{
     overrides?: SchoolCreateFormOverridesProps | undefined | null;

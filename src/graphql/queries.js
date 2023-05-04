@@ -7,23 +7,10 @@ export const getSchool = /* GraphQL */ `
       name
       logoUrl
       description
-      sports {
-        items {
-          name
-          description
-          school
-          sport
-          startYear
-          endYear
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportsId
-        }
-        nextToken
-      }
+      sportsIds
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -41,10 +28,10 @@ export const listSchools = /* GraphQL */ `
         name
         logoUrl
         description
-        sports {
-          nextToken
-        }
+        sportsIds
         notes
+        createdBy
+        kioskReady
         id
         createdAt
         updatedAt
@@ -54,75 +41,57 @@ export const listSchools = /* GraphQL */ `
   }
 `;
 export const getSchoolSport = /* GraphQL */ `
-  query GetSchoolSport($id: ID!) {
-    getSchoolSport(id: $id) {
+  query GetSchoolSport($sportId: String!) {
+    getSchoolSport(sportId: $sportId) {
       name
+      entryType
       description
       school
       sport
+      sportId
       startYear
       endYear
-      wins {
-        items {
-          winTitle
-          year
-          description
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportWinsId
-        }
-        nextToken
-      }
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      wins
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
-      schoolSportsId
     }
   }
 `;
 export const listSchoolSports = /* GraphQL */ `
   query ListSchoolSports(
+    $sportId: String
     $filter: ModelSchoolSportFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listSchoolSports(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listSchoolSports(
+      sportId: $sportId
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
         name
+        entryType
         description
         school
         sport
+        sportId
         startYear
         endYear
-        wins {
-          nextToken
-        }
-        images {
-          nextToken
-        }
+        wins
+        images
         notes
-        id
+        createdBy
+        kioskReady
         createdAt
         updatedAt
-        schoolSportsId
       }
       nextToken
     }
@@ -133,24 +102,13 @@ export const getProfessionalSport = /* GraphQL */ `
     getProfessionalSport(id: $id) {
       startYear
       endYear
-      sportType
+      sport
+      teams
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -171,12 +129,13 @@ export const listProfessionalSports = /* GraphQL */ `
       items {
         startYear
         endYear
-        sportType
+        sport
+        teams
         description
-        images {
-          nextToken
-        }
+        images
         notes
+        createdBy
+        kioskReady
         id
         createdAt
         updatedAt
@@ -186,30 +145,19 @@ export const listProfessionalSports = /* GraphQL */ `
   }
 `;
 export const getProfessionalTeam = /* GraphQL */ `
-  query GetProfessionalTeam($id: ID!) {
-    getProfessionalTeam(id: $id) {
+  query GetProfessionalTeam($teamId: String!) {
+    getProfessionalTeam(teamId: $teamId) {
       name
+      entryType
       startYear
       endYear
-      sportType
+      sport
+      teamId
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
     }
@@ -217,26 +165,31 @@ export const getProfessionalTeam = /* GraphQL */ `
 `;
 export const listProfessionalTeams = /* GraphQL */ `
   query ListProfessionalTeams(
+    $teamId: String
     $filter: ModelProfessionalTeamFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
     listProfessionalTeams(
+      teamId: $teamId
       filter: $filter
       limit: $limit
       nextToken: $nextToken
+      sortDirection: $sortDirection
     ) {
       items {
         name
+        entryType
         startYear
         endYear
-        sportType
+        sport
+        teamId
         description
-        images {
-          nextToken
-        }
+        images
         notes
-        id
+        createdBy
+        kioskReady
         createdAt
         updatedAt
       }
@@ -248,26 +201,15 @@ export const getHallOfFame = /* GraphQL */ `
   query GetHallOfFame($id: ID!) {
     getHallOfFame(id: $id) {
       name
+      entryType
       inductionYear
       sport
       description
       notableAchievements
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -283,14 +225,15 @@ export const listHallOfFames = /* GraphQL */ `
     listHallOfFames(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
+        entryType
         inductionYear
         sport
         description
         notableAchievements
-        images {
-          nextToken
-        }
+        images
         notes
+        createdBy
+        kioskReady
         id
         createdAt
         updatedAt
@@ -303,26 +246,15 @@ export const getVenue = /* GraphQL */ `
   query GetVenue($id: ID!) {
     getVenue(id: $id) {
       name
+      entryType
       startYear
       endYear
       location
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -338,14 +270,15 @@ export const listVenues = /* GraphQL */ `
     listVenues(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
+        entryType
         startYear
         endYear
         location
         description
-        images {
-          nextToken
-        }
+        images
         notes
+        createdBy
+        kioskReady
         id
         createdAt
         updatedAt
@@ -358,6 +291,7 @@ export const getSport = /* GraphQL */ `
   query GetSport($id: ID!) {
     getSport(id: $id) {
       type
+      createdBy
       id
       createdAt
       updatedAt
@@ -373,6 +307,7 @@ export const listSports = /* GraphQL */ `
     listSports(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         type
+        createdBy
         id
         createdAt
         updatedAt
@@ -382,106 +317,49 @@ export const listSports = /* GraphQL */ `
   }
 `;
 export const getImage = /* GraphQL */ `
-  query GetImage($id: ID!) {
-    getImage(id: $id) {
+  query GetImage($imageID: String!) {
+    getImage(imageID: $imageID) {
+      imageID
+      thumbnailID
       name
-      url
-      id
+      originalSize
+      description
+      credits
+      size
+      type
+      createdBy
       createdAt
       updatedAt
-      schoolSportImagesId
-      professionalSportImagesId
-      professionalTeamImagesId
-      hallOfFameImagesId
-      venueImagesId
     }
   }
 `;
 export const listImages = /* GraphQL */ `
   query ListImages(
+    $imageID: String
     $filter: ModelImageFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listImages(
+      imageID: $imageID
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
+        imageID
+        thumbnailID
         name
-        url
-        id
-        createdAt
-        updatedAt
-        schoolSportImagesId
-        professionalSportImagesId
-        professionalTeamImagesId
-        hallOfFameImagesId
-        venueImagesId
-      }
-      nextToken
-    }
-  }
-`;
-export const getWin = /* GraphQL */ `
-  query GetWin($id: ID!) {
-    getWin(id: $id) {
-      winTitle
-      school {
-        name
+        originalSize
         description
-        school
-        sport
-        startYear
-        endYear
-        wins {
-          nextToken
-        }
-        images {
-          nextToken
-        }
-        notes
-        id
+        credits
+        size
+        type
+        createdBy
         createdAt
         updatedAt
-        schoolSportsId
-      }
-      year
-      description
-      notes
-      id
-      createdAt
-      updatedAt
-      schoolSportWinsId
-    }
-  }
-`;
-export const listWins = /* GraphQL */ `
-  query ListWins(
-    $filter: ModelWinFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listWins(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        winTitle
-        school {
-          name
-          description
-          school
-          sport
-          startYear
-          endYear
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportsId
-        }
-        year
-        description
-        notes
-        id
-        createdAt
-        updatedAt
-        schoolSportWinsId
       }
       nextToken
     }

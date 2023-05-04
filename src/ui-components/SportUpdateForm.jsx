@@ -194,8 +194,10 @@ export default function SportUpdateForm(props) {
   } = props;
   const initialValues = {
     type: [],
+    createdBy: "",
   };
   const [type, setType] = React.useState(initialValues.type);
+  const [createdBy, setCreatedBy] = React.useState(initialValues.createdBy);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = sportRecord
@@ -203,6 +205,7 @@ export default function SportUpdateForm(props) {
       : initialValues;
     setType(cleanValues.type ?? []);
     setCurrentTypeValue("");
+    setCreatedBy(cleanValues.createdBy);
     setErrors({});
   };
   const [sportRecord, setSportRecord] = React.useState(sportModelProp);
@@ -220,6 +223,7 @@ export default function SportUpdateForm(props) {
   const typeRef = React.createRef();
   const validations = {
     type: [],
+    createdBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -248,6 +252,7 @@ export default function SportUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           type,
+          createdBy,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -300,6 +305,7 @@ export default function SportUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               type: values,
+              createdBy,
             };
             const result = onChange(modelFields);
             values = result?.type ?? values;
@@ -336,6 +342,31 @@ export default function SportUpdateForm(props) {
           {...getOverrideProps(overrides, "type")}
         ></TextField>
       </ArrayField>
+      <TextField
+        label="Created by"
+        isRequired={false}
+        isReadOnly={false}
+        value={createdBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              type,
+              createdBy: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdBy ?? value;
+          }
+          if (errors.createdBy?.hasError) {
+            runValidationTasks("createdBy", value);
+          }
+          setCreatedBy(value);
+        }}
+        onBlur={() => runValidationTasks("createdBy", createdBy)}
+        errorMessage={errors.createdBy?.errorMessage}
+        hasError={errors.createdBy?.hasError}
+        {...getOverrideProps(overrides, "createdBy")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

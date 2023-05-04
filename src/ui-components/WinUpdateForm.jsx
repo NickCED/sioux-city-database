@@ -27,14 +27,12 @@ export default function WinUpdateForm(props) {
     winTitle: "",
     year: "",
     description: "",
-    notes: "",
   };
   const [winTitle, setWinTitle] = React.useState(initialValues.winTitle);
   const [year, setYear] = React.useState(initialValues.year);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [notes, setNotes] = React.useState(initialValues.notes);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = winRecord
@@ -43,7 +41,6 @@ export default function WinUpdateForm(props) {
     setWinTitle(cleanValues.winTitle);
     setYear(cleanValues.year);
     setDescription(cleanValues.description);
-    setNotes(cleanValues.notes);
     setErrors({});
   };
   const [winRecord, setWinRecord] = React.useState(winModelProp);
@@ -59,7 +56,6 @@ export default function WinUpdateForm(props) {
     winTitle: [{ type: "Required" }],
     year: [],
     description: [],
-    notes: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -90,7 +86,6 @@ export default function WinUpdateForm(props) {
           winTitle,
           year,
           description,
-          notes,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -149,7 +144,6 @@ export default function WinUpdateForm(props) {
               winTitle: value,
               year,
               description,
-              notes,
             };
             const result = onChange(modelFields);
             value = result?.winTitle ?? value;
@@ -180,7 +174,6 @@ export default function WinUpdateForm(props) {
               winTitle,
               year: value,
               description,
-              notes,
             };
             const result = onChange(modelFields);
             value = result?.year ?? value;
@@ -207,7 +200,6 @@ export default function WinUpdateForm(props) {
               winTitle,
               year,
               description: value,
-              notes,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -221,33 +213,6 @@ export default function WinUpdateForm(props) {
         errorMessage={errors.description?.errorMessage}
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
-      ></TextField>
-      <TextField
-        label="Notes"
-        isRequired={false}
-        isReadOnly={false}
-        value={notes}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              winTitle,
-              year,
-              description,
-              notes: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.notes ?? value;
-          }
-          if (errors.notes?.hasError) {
-            runValidationTasks("notes", value);
-          }
-          setNotes(value);
-        }}
-        onBlur={() => runValidationTasks("notes", notes)}
-        errorMessage={errors.notes?.errorMessage}
-        hasError={errors.notes?.hasError}
-        {...getOverrideProps(overrides, "notes")}
       ></TextField>
       <Flex
         justifyContent="space-between"

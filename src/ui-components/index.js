@@ -22,5 +22,3 @@ export { default as SportCreateForm } from "./SportCreateForm";
 export { default as SportUpdateForm } from "./SportUpdateForm";
 export { default as ImageCreateForm } from "./ImageCreateForm";
 export { default as ImageUpdateForm } from "./ImageUpdateForm";
-export { default as WinCreateForm } from "./WinCreateForm";
-export { default as WinUpdateForm } from "./WinUpdateForm";

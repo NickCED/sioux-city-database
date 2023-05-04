@@ -1,50 +1,56 @@
-import {
-  Button,
-  Card,
-  Flex,
-  Image,
-  SearchField,
-  Text,
-} from '@aws-amplify/ui-react';
-import { Storage } from 'aws-amplify';
+import { Button, Flex, Image, SearchField, Text } from '@aws-amplify/ui-react';
+import { useState, useEffect } from 'react';
+import logoSrc from '../images/siouxCityLogo.png';
+import darkLogoSrc from '../images/siouxCityLogoDarkMode.png';
 import React from 'react';
 
 export default function NavBar(props) {
-  const [logoSrc, setLogoSrc] = React.useState('');
+  const [mode, setMode] = useState();
 
-  React.useEffect(() => {
-    async function fetchLogo() {
-      const logo = await Storage.get('siouxCityLogo.png');
-      setLogoSrc(logo);
-    }
-    fetchLogo();
+  useEffect(() => {
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', (event) => {
+        const colorScheme = event.matches ? 'dark' : 'light';
+        console.log(colorScheme); // "dark" or "light"
+        setMode(colorScheme);
+      });
   }, []);
+
+  const handleSearchChange = (event) => {
+    props.onSearchChange(event.target.value);
+  };
+
   return (
     <Flex
+      className='NavBar'
+      minWidth={'570px'}
       direction='row'
       alignItems='center'
       display='flex'
       wrap={'wrap'}
+      flex='0 0 auto'
       justifyContent='space-between'
       padding='0.5rem'
       backgroundColor='var(--amplify-colors-primary)'
       color='var(--amplify-colors-white)'
     >
-      <Card
-        display={'flex'}
+      <Flex
+        grow={1}
         alignItems='center'
-        justifyContent='center'
-        basis={'content'}
+        className='quickfixNavBar'
+        justifyContent={{ base: 'center', md: 'flex-start' }}
       >
         <Image
-          src={logoSrc}
+          src={mode === 'dark' ? darkLogoSrc : logoSrc}
           alt='Sioux City Logo'
           width='29vw'
           objectFit={'contain'}
           margin='0 2vw 0 2vw'
           maxWidth={'385px'}
+          minWidth={'235px'}
         />
-        <Card display={'flex'} alignItems='center'>
+        <Flex className='sportsHistory' alignItems='center' gap={'0'}>
           <Text
             fontWeight='700'
             fontSize='1rem'
@@ -71,16 +77,24 @@ export default function NavBar(props) {
           >
             Database
           </Text>
-        </Card>
-      </Card>
-      <Card display={'flex'} alignItems='center' basis={'content'}>
-        <Button marginRight={'1vw'}>add entry</Button>
+        </Flex>
+      </Flex>
 
-        <SearchField width={'20vw'} placeholder='Search...' />
+      <Flex grow={1} margin={'0 2vw 0 2vw'}>
+        <Button marginRight={'1vw'} onClick={props.onAddEntry}>
+          add entry
+        </Button>
+
+        <SearchField
+          grow={1}
+          placeholder='Search...'
+          onChange={handleSearchChange}
+          isDisabled={props.searchDisabled}
+        />
         <Button marginLeft={'1vw'} onClick={props.onSignOut}>
           sign out
         </Button>
-      </Card>
+      </Flex>
     </Flex>
   );
 }

@@ -14,6 +14,7 @@ import {
   Grid,
   Icon,
   ScrollView,
+  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -194,13 +195,18 @@ export default function HallOfFameUpdateForm(props) {
   } = props;
   const initialValues = {
     name: "",
+    entryType: "",
     inductionYear: "",
-    sport: "",
+    sport: [],
     description: "",
     notableAchievements: [],
+    images: [],
     notes: "",
+    createdBy: "",
+    kioskReady: false,
   };
   const [name, setName] = React.useState(initialValues.name);
+  const [entryType, setEntryType] = React.useState(initialValues.entryType);
   const [inductionYear, setInductionYear] = React.useState(
     initialValues.inductionYear
   );
@@ -211,19 +217,28 @@ export default function HallOfFameUpdateForm(props) {
   const [notableAchievements, setNotableAchievements] = React.useState(
     initialValues.notableAchievements
   );
+  const [images, setImages] = React.useState(initialValues.images);
   const [notes, setNotes] = React.useState(initialValues.notes);
+  const [createdBy, setCreatedBy] = React.useState(initialValues.createdBy);
+  const [kioskReady, setKioskReady] = React.useState(initialValues.kioskReady);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = hallOfFameRecord
       ? { ...initialValues, ...hallOfFameRecord }
       : initialValues;
     setName(cleanValues.name);
+    setEntryType(cleanValues.entryType);
     setInductionYear(cleanValues.inductionYear);
-    setSport(cleanValues.sport);
+    setSport(cleanValues.sport ?? []);
+    setCurrentSportValue("");
     setDescription(cleanValues.description);
     setNotableAchievements(cleanValues.notableAchievements ?? []);
     setCurrentNotableAchievementsValue("");
+    setImages(cleanValues.images ?? []);
+    setCurrentImagesValue("");
     setNotes(cleanValues.notes);
+    setCreatedBy(cleanValues.createdBy);
+    setKioskReady(cleanValues.kioskReady);
     setErrors({});
   };
   const [hallOfFameRecord, setHallOfFameRecord] =
@@ -238,16 +253,24 @@ export default function HallOfFameUpdateForm(props) {
     queryData();
   }, [idProp, hallOfFameModelProp]);
   React.useEffect(resetStateValues, [hallOfFameRecord]);
+  const [currentSportValue, setCurrentSportValue] = React.useState("");
+  const sportRef = React.createRef();
   const [currentNotableAchievementsValue, setCurrentNotableAchievementsValue] =
     React.useState("");
   const notableAchievementsRef = React.createRef();
+  const [currentImagesValue, setCurrentImagesValue] = React.useState("");
+  const imagesRef = React.createRef();
   const validations = {
     name: [{ type: "Required" }],
+    entryType: [{ type: "Required" }],
     inductionYear: [],
     sport: [],
     description: [],
     notableAchievements: [],
+    images: [],
     notes: [],
+    createdBy: [],
+    kioskReady: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -276,11 +299,15 @@ export default function HallOfFameUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
+          entryType,
           inductionYear,
           sport,
           description,
           notableAchievements,
+          images,
           notes,
+          createdBy,
+          kioskReady,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -337,11 +364,15 @@ export default function HallOfFameUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
+              entryType,
               inductionYear,
               sport,
               description,
               notableAchievements,
+              images,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -357,6 +388,39 @@ export default function HallOfFameUpdateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
+        label="Entry type"
+        isRequired={true}
+        isReadOnly={false}
+        value={entryType}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              entryType: value,
+              inductionYear,
+              sport,
+              description,
+              notableAchievements,
+              images,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.entryType ?? value;
+          }
+          if (errors.entryType?.hasError) {
+            runValidationTasks("entryType", value);
+          }
+          setEntryType(value);
+        }}
+        onBlur={() => runValidationTasks("entryType", entryType)}
+        errorMessage={errors.entryType?.errorMessage}
+        hasError={errors.entryType?.hasError}
+        {...getOverrideProps(overrides, "entryType")}
+      ></TextField>
+      <TextField
         label="Induction year"
         isRequired={false}
         isReadOnly={false}
@@ -370,11 +434,15 @@ export default function HallOfFameUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              entryType,
               inductionYear: value,
               sport,
               description,
               notableAchievements,
+              images,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.inductionYear ?? value;
@@ -389,35 +457,57 @@ export default function HallOfFameUpdateForm(props) {
         hasError={errors.inductionYear?.hasError}
         {...getOverrideProps(overrides, "inductionYear")}
       ></TextField>
-      <TextField
-        label="Sport"
-        isRequired={false}
-        isReadOnly={false}
-        value={sport}
-        onChange={(e) => {
-          let { value } = e.target;
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               name,
+              entryType,
               inductionYear,
-              sport: value,
+              sport: values,
               description,
               notableAchievements,
+              images,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
-            value = result?.sport ?? value;
+            values = result?.sport ?? values;
           }
-          if (errors.sport?.hasError) {
-            runValidationTasks("sport", value);
-          }
-          setSport(value);
+          setSport(values);
+          setCurrentSportValue("");
         }}
-        onBlur={() => runValidationTasks("sport", sport)}
-        errorMessage={errors.sport?.errorMessage}
-        hasError={errors.sport?.hasError}
-        {...getOverrideProps(overrides, "sport")}
-      ></TextField>
+        currentFieldValue={currentSportValue}
+        label={"Sport"}
+        items={sport}
+        hasError={errors?.sport?.hasError}
+        errorMessage={errors?.sport?.errorMessage}
+        setFieldValue={setCurrentSportValue}
+        inputFieldRef={sportRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Sport"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentSportValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.sport?.hasError) {
+              runValidationTasks("sport", value);
+            }
+            setCurrentSportValue(value);
+          }}
+          onBlur={() => runValidationTasks("sport", currentSportValue)}
+          errorMessage={errors.sport?.errorMessage}
+          hasError={errors.sport?.hasError}
+          ref={sportRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "sport")}
+        ></TextField>
+      </ArrayField>
       <TextField
         label="Description"
         isRequired={false}
@@ -428,11 +518,15 @@ export default function HallOfFameUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              entryType,
               inductionYear,
               sport,
               description: value,
               notableAchievements,
+              images,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -453,11 +547,15 @@ export default function HallOfFameUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              entryType,
               inductionYear,
               sport,
               description,
               notableAchievements: values,
+              images,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             values = result?.notableAchievements ?? values;
@@ -499,6 +597,57 @@ export default function HallOfFameUpdateForm(props) {
           {...getOverrideProps(overrides, "notableAchievements")}
         ></TextField>
       </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              entryType,
+              inductionYear,
+              sport,
+              description,
+              notableAchievements,
+              images: values,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            values = result?.images ?? values;
+          }
+          setImages(values);
+          setCurrentImagesValue("");
+        }}
+        currentFieldValue={currentImagesValue}
+        label={"Images"}
+        items={images}
+        hasError={errors?.images?.hasError}
+        errorMessage={errors?.images?.errorMessage}
+        setFieldValue={setCurrentImagesValue}
+        inputFieldRef={imagesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Images"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentImagesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.images?.hasError) {
+              runValidationTasks("images", value);
+            }
+            setCurrentImagesValue(value);
+          }}
+          onBlur={() => runValidationTasks("images", currentImagesValue)}
+          errorMessage={errors.images?.errorMessage}
+          hasError={errors.images?.hasError}
+          ref={imagesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "images")}
+        ></TextField>
+      </ArrayField>
       <TextField
         label="Notes"
         isRequired={false}
@@ -509,11 +658,15 @@ export default function HallOfFameUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              entryType,
               inductionYear,
               sport,
               description,
               notableAchievements,
+              images,
               notes: value,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.notes ?? value;
@@ -528,6 +681,72 @@ export default function HallOfFameUpdateForm(props) {
         hasError={errors.notes?.hasError}
         {...getOverrideProps(overrides, "notes")}
       ></TextField>
+      <TextField
+        label="Created by"
+        isRequired={false}
+        isReadOnly={false}
+        value={createdBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              entryType,
+              inductionYear,
+              sport,
+              description,
+              notableAchievements,
+              images,
+              notes,
+              createdBy: value,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdBy ?? value;
+          }
+          if (errors.createdBy?.hasError) {
+            runValidationTasks("createdBy", value);
+          }
+          setCreatedBy(value);
+        }}
+        onBlur={() => runValidationTasks("createdBy", createdBy)}
+        errorMessage={errors.createdBy?.errorMessage}
+        hasError={errors.createdBy?.hasError}
+        {...getOverrideProps(overrides, "createdBy")}
+      ></TextField>
+      <SwitchField
+        label="Kiosk ready"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={kioskReady}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              entryType,
+              inductionYear,
+              sport,
+              description,
+              notableAchievements,
+              images,
+              notes,
+              createdBy,
+              kioskReady: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.kioskReady ?? value;
+          }
+          if (errors.kioskReady?.hasError) {
+            runValidationTasks("kioskReady", value);
+          }
+          setKioskReady(value);
+        }}
+        onBlur={() => runValidationTasks("kioskReady", kioskReady)}
+        errorMessage={errors.kioskReady?.errorMessage}
+        hasError={errors.kioskReady?.hasError}
+        {...getOverrideProps(overrides, "kioskReady")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

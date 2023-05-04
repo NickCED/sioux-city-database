@@ -10,23 +10,10 @@ export const createSchool = /* GraphQL */ `
       name
       logoUrl
       description
-      sports {
-        items {
-          name
-          description
-          school
-          sport
-          startYear
-          endYear
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportsId
-        }
-        nextToken
-      }
+      sportsIds
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -42,23 +29,10 @@ export const updateSchool = /* GraphQL */ `
       name
       logoUrl
       description
-      sports {
-        items {
-          name
-          description
-          school
-          sport
-          startYear
-          endYear
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportsId
-        }
-        nextToken
-      }
+      sportsIds
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -74,23 +48,10 @@ export const deleteSchool = /* GraphQL */ `
       name
       logoUrl
       description
-      sports {
-        items {
-          name
-          description
-          school
-          sport
-          startYear
-          endYear
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportsId
-        }
-        nextToken
-      }
+      sportsIds
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -104,44 +65,20 @@ export const createSchoolSport = /* GraphQL */ `
   ) {
     createSchoolSport(input: $input, condition: $condition) {
       name
+      entryType
       description
       school
       sport
+      sportId
       startYear
       endYear
-      wins {
-        items {
-          winTitle
-          year
-          description
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportWinsId
-        }
-        nextToken
-      }
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      wins
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
-      schoolSportsId
     }
   }
 `;
@@ -152,44 +89,20 @@ export const updateSchoolSport = /* GraphQL */ `
   ) {
     updateSchoolSport(input: $input, condition: $condition) {
       name
+      entryType
       description
       school
       sport
+      sportId
       startYear
       endYear
-      wins {
-        items {
-          winTitle
-          year
-          description
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportWinsId
-        }
-        nextToken
-      }
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      wins
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
-      schoolSportsId
     }
   }
 `;
@@ -200,44 +113,20 @@ export const deleteSchoolSport = /* GraphQL */ `
   ) {
     deleteSchoolSport(input: $input, condition: $condition) {
       name
+      entryType
       description
       school
       sport
+      sportId
       startYear
       endYear
-      wins {
-        items {
-          winTitle
-          year
-          description
-          notes
-          id
-          createdAt
-          updatedAt
-          schoolSportWinsId
-        }
-        nextToken
-      }
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      wins
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
-      schoolSportsId
     }
   }
 `;
@@ -249,24 +138,13 @@ export const createProfessionalSport = /* GraphQL */ `
     createProfessionalSport(input: $input, condition: $condition) {
       startYear
       endYear
-      sportType
+      sport
+      teams
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -281,24 +159,13 @@ export const updateProfessionalSport = /* GraphQL */ `
     updateProfessionalSport(input: $input, condition: $condition) {
       startYear
       endYear
-      sportType
+      sport
+      teams
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -313,24 +180,13 @@ export const deleteProfessionalSport = /* GraphQL */ `
     deleteProfessionalSport(input: $input, condition: $condition) {
       startYear
       endYear
-      sportType
+      sport
+      teams
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -344,27 +200,16 @@ export const createProfessionalTeam = /* GraphQL */ `
   ) {
     createProfessionalTeam(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
-      sportType
+      sport
+      teamId
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
     }
@@ -377,27 +222,16 @@ export const updateProfessionalTeam = /* GraphQL */ `
   ) {
     updateProfessionalTeam(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
-      sportType
+      sport
+      teamId
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
     }
@@ -410,27 +244,16 @@ export const deleteProfessionalTeam = /* GraphQL */ `
   ) {
     deleteProfessionalTeam(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
-      sportType
+      sport
+      teamId
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
-      id
+      createdBy
+      kioskReady
       createdAt
       updatedAt
     }
@@ -443,26 +266,15 @@ export const createHallOfFame = /* GraphQL */ `
   ) {
     createHallOfFame(input: $input, condition: $condition) {
       name
+      entryType
       inductionYear
       sport
       description
       notableAchievements
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -476,26 +288,15 @@ export const updateHallOfFame = /* GraphQL */ `
   ) {
     updateHallOfFame(input: $input, condition: $condition) {
       name
+      entryType
       inductionYear
       sport
       description
       notableAchievements
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -509,26 +310,15 @@ export const deleteHallOfFame = /* GraphQL */ `
   ) {
     deleteHallOfFame(input: $input, condition: $condition) {
       name
+      entryType
       inductionYear
       sport
       description
       notableAchievements
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -542,26 +332,15 @@ export const createVenue = /* GraphQL */ `
   ) {
     createVenue(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
       location
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -575,26 +354,15 @@ export const updateVenue = /* GraphQL */ `
   ) {
     updateVenue(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
       location
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -608,26 +376,15 @@ export const deleteVenue = /* GraphQL */ `
   ) {
     deleteVenue(input: $input, condition: $condition) {
       name
+      entryType
       startYear
       endYear
       location
       description
-      images {
-        items {
-          name
-          url
-          id
-          createdAt
-          updatedAt
-          schoolSportImagesId
-          professionalSportImagesId
-          professionalTeamImagesId
-          hallOfFameImagesId
-          venueImagesId
-        }
-        nextToken
-      }
+      images
       notes
+      createdBy
+      kioskReady
       id
       createdAt
       updatedAt
@@ -641,6 +398,7 @@ export const createSport = /* GraphQL */ `
   ) {
     createSport(input: $input, condition: $condition) {
       type
+      createdBy
       id
       createdAt
       updatedAt
@@ -654,6 +412,7 @@ export const updateSport = /* GraphQL */ `
   ) {
     updateSport(input: $input, condition: $condition) {
       type
+      createdBy
       id
       createdAt
       updatedAt
@@ -667,6 +426,7 @@ export const deleteSport = /* GraphQL */ `
   ) {
     deleteSport(input: $input, condition: $condition) {
       type
+      createdBy
       id
       createdAt
       updatedAt
@@ -679,16 +439,17 @@ export const createImage = /* GraphQL */ `
     $condition: ModelImageConditionInput
   ) {
     createImage(input: $input, condition: $condition) {
+      imageID
+      thumbnailID
       name
-      url
-      id
+      originalSize
+      description
+      credits
+      size
+      type
+      createdBy
       createdAt
       updatedAt
-      schoolSportImagesId
-      professionalSportImagesId
-      professionalTeamImagesId
-      hallOfFameImagesId
-      venueImagesId
     }
   }
 `;
@@ -698,16 +459,17 @@ export const updateImage = /* GraphQL */ `
     $condition: ModelImageConditionInput
   ) {
     updateImage(input: $input, condition: $condition) {
+      imageID
+      thumbnailID
       name
-      url
-      id
+      originalSize
+      description
+      credits
+      size
+      type
+      createdBy
       createdAt
       updatedAt
-      schoolSportImagesId
-      professionalSportImagesId
-      professionalTeamImagesId
-      hallOfFameImagesId
-      venueImagesId
     }
   }
 `;
@@ -717,124 +479,17 @@ export const deleteImage = /* GraphQL */ `
     $condition: ModelImageConditionInput
   ) {
     deleteImage(input: $input, condition: $condition) {
+      imageID
+      thumbnailID
       name
-      url
-      id
-      createdAt
-      updatedAt
-      schoolSportImagesId
-      professionalSportImagesId
-      professionalTeamImagesId
-      hallOfFameImagesId
-      venueImagesId
-    }
-  }
-`;
-export const createWin = /* GraphQL */ `
-  mutation CreateWin(
-    $input: CreateWinInput!
-    $condition: ModelWinConditionInput
-  ) {
-    createWin(input: $input, condition: $condition) {
-      winTitle
-      school {
-        name
-        description
-        school
-        sport
-        startYear
-        endYear
-        wins {
-          nextToken
-        }
-        images {
-          nextToken
-        }
-        notes
-        id
-        createdAt
-        updatedAt
-        schoolSportsId
-      }
-      year
+      originalSize
       description
-      notes
-      id
+      credits
+      size
+      type
+      createdBy
       createdAt
       updatedAt
-      schoolSportWinsId
-    }
-  }
-`;
-export const updateWin = /* GraphQL */ `
-  mutation UpdateWin(
-    $input: UpdateWinInput!
-    $condition: ModelWinConditionInput
-  ) {
-    updateWin(input: $input, condition: $condition) {
-      winTitle
-      school {
-        name
-        description
-        school
-        sport
-        startYear
-        endYear
-        wins {
-          nextToken
-        }
-        images {
-          nextToken
-        }
-        notes
-        id
-        createdAt
-        updatedAt
-        schoolSportsId
-      }
-      year
-      description
-      notes
-      id
-      createdAt
-      updatedAt
-      schoolSportWinsId
-    }
-  }
-`;
-export const deleteWin = /* GraphQL */ `
-  mutation DeleteWin(
-    $input: DeleteWinInput!
-    $condition: ModelWinConditionInput
-  ) {
-    deleteWin(input: $input, condition: $condition) {
-      winTitle
-      school {
-        name
-        description
-        school
-        sport
-        startYear
-        endYear
-        wins {
-          nextToken
-        }
-        images {
-          nextToken
-        }
-        notes
-        id
-        createdAt
-        updatedAt
-        schoolSportsId
-      }
-      year
-      description
-      notes
-      id
-      createdAt
-      updatedAt
-      schoolSportWinsId
     }
   }
 `;

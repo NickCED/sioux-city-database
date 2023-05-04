@@ -6,11 +6,181 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  SwitchField,
+  Text,
+  TextField,
+  useTheme,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { School } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size="small"
+            variation="link"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function SchoolCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -26,27 +196,42 @@ export default function SchoolCreateForm(props) {
     name: "",
     logoUrl: "",
     description: "",
+    sportsIds: [],
     notes: "",
+    createdBy: "",
+    kioskReady: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [logoUrl, setLogoUrl] = React.useState(initialValues.logoUrl);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [sportsIds, setSportsIds] = React.useState(initialValues.sportsIds);
   const [notes, setNotes] = React.useState(initialValues.notes);
+  const [createdBy, setCreatedBy] = React.useState(initialValues.createdBy);
+  const [kioskReady, setKioskReady] = React.useState(initialValues.kioskReady);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setLogoUrl(initialValues.logoUrl);
     setDescription(initialValues.description);
+    setSportsIds(initialValues.sportsIds);
+    setCurrentSportsIdsValue("");
     setNotes(initialValues.notes);
+    setCreatedBy(initialValues.createdBy);
+    setKioskReady(initialValues.kioskReady);
     setErrors({});
   };
+  const [currentSportsIdsValue, setCurrentSportsIdsValue] = React.useState("");
+  const sportsIdsRef = React.createRef();
   const validations = {
     name: [{ type: "Required" }],
     logoUrl: [],
     description: [],
+    sportsIds: [],
     notes: [],
+    createdBy: [],
+    kioskReady: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -77,7 +262,10 @@ export default function SchoolCreateForm(props) {
           name,
           logoUrl,
           description,
+          sportsIds,
           notes,
+          createdBy,
+          kioskReady,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -135,7 +323,10 @@ export default function SchoolCreateForm(props) {
               name: value,
               logoUrl,
               description,
+              sportsIds,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -162,7 +353,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl: value,
               description,
+              sportsIds,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.logoUrl ?? value;
@@ -189,7 +383,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description: value,
+              sportsIds,
               notes,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -204,6 +401,54 @@ export default function SchoolCreateForm(props) {
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              sportsIds: values,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            values = result?.sportsIds ?? values;
+          }
+          setSportsIds(values);
+          setCurrentSportsIdsValue("");
+        }}
+        currentFieldValue={currentSportsIdsValue}
+        label={"Sports ids"}
+        items={sportsIds}
+        hasError={errors?.sportsIds?.hasError}
+        errorMessage={errors?.sportsIds?.errorMessage}
+        setFieldValue={setCurrentSportsIdsValue}
+        inputFieldRef={sportsIdsRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Sports ids"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentSportsIdsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.sportsIds?.hasError) {
+              runValidationTasks("sportsIds", value);
+            }
+            setCurrentSportsIdsValue(value);
+          }}
+          onBlur={() => runValidationTasks("sportsIds", currentSportsIdsValue)}
+          errorMessage={errors.sportsIds?.errorMessage}
+          hasError={errors.sportsIds?.hasError}
+          ref={sportsIdsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "sportsIds")}
+        ></TextField>
+      </ArrayField>
       <TextField
         label="Notes"
         isRequired={false}
@@ -216,7 +461,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description,
+              sportsIds,
               notes: value,
+              createdBy,
+              kioskReady,
             };
             const result = onChange(modelFields);
             value = result?.notes ?? value;
@@ -231,6 +479,66 @@ export default function SchoolCreateForm(props) {
         hasError={errors.notes?.hasError}
         {...getOverrideProps(overrides, "notes")}
       ></TextField>
+      <TextField
+        label="Created by"
+        isRequired={false}
+        isReadOnly={false}
+        value={createdBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              sportsIds,
+              notes,
+              createdBy: value,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdBy ?? value;
+          }
+          if (errors.createdBy?.hasError) {
+            runValidationTasks("createdBy", value);
+          }
+          setCreatedBy(value);
+        }}
+        onBlur={() => runValidationTasks("createdBy", createdBy)}
+        errorMessage={errors.createdBy?.errorMessage}
+        hasError={errors.createdBy?.hasError}
+        {...getOverrideProps(overrides, "createdBy")}
+      ></TextField>
+      <SwitchField
+        label="Kiosk ready"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={kioskReady}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              sportsIds,
+              notes,
+              createdBy,
+              kioskReady: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.kioskReady ?? value;
+          }
+          if (errors.kioskReady?.hasError) {
+            runValidationTasks("kioskReady", value);
+          }
+          setKioskReady(value);
+        }}
+        onBlur={() => runValidationTasks("kioskReady", kioskReady)}
+        errorMessage={errors.kioskReady?.errorMessage}
+        hasError={errors.kioskReady?.hasError}
+        {...getOverrideProps(overrides, "kioskReady")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

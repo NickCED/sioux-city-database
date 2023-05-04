@@ -2,74 +2,95 @@ type School @model @auth(rules: [{ allow: private }]) {
   name: String!
   logoUrl: String
   description: String
-  sports: [SchoolSport] @hasMany
+  sportsIds: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type SchoolSport @model @auth(rules: [{ allow: private }]) {
-  name: String!
+  name: String
+  entryType: String!
   description: String
   school: String
   sport: String
+  sportId: String! @primaryKey
   startYear: Int
   endYear: Int
-  wins: [Win] @hasMany
-  images: [Image] @hasMany
+  wins: [String]
+  images: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type ProfessionalSport @model @auth(rules: [{ allow: private }]) {
   startYear: Int
   endYear: Int
-  sportType: String
+  sport: String
+  teams: [String]
   description: String
-  images: [Image] @hasMany
+  images: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type ProfessionalTeam @model @auth(rules: [{ allow: private }]) {
   name: String!
+  entryType: String!
   startYear: Int
   endYear: Int
-  sportType: String
+  sport: String
+  teamId: String! @primaryKey
+  wins: [String]
   description: String
-  images: [Image] @hasMany
+  images: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type HallOfFame @model @auth(rules: [{ allow: private }]) {
   name: String!
+  entryType: String!
   inductionYear: Int
-  sport: String
+  sport: [String]
   description: String
   notableAchievements: [String]
-  images: [Image] @hasMany
+  images: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type Venue @model @auth(rules: [{ allow: private }]) {
   name: String!
+  entryType: String!
   startYear: Int
   endYear: Int
   location: String
   description: String
-  images: [Image] @hasMany
+  images: [String]
   notes: String
+  createdBy: String
+  kioskReady: Boolean
 }
 
 type Sport @model @auth(rules: [{ allow: private }]) {
   type: [String]
+  createdBy: String
 }
 
 type Image @model @auth(rules: [{ allow: private }]) {
+  imageID: String! @primaryKey
+  thumbnailID: String
   name: String!
-  url: String!
-}
-
-type Win @model @auth(rules: [{ allow: private }]) {
-  winTitle: String!
-  school: SchoolSport @belongsTo
-  year: Int
+  originalSize: Int
   description: String
-  notes: String
+  preSignedUrl: String
+  credits: String
+  size: Int
+  type: String
+  createdBy: String
 }

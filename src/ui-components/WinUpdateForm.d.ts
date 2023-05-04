@@ -17,13 +17,11 @@ export declare type WinUpdateFormInputValues = {
     winTitle?: string;
     year?: number;
     description?: string;
-    notes?: string;
 };
 export declare type WinUpdateFormValidationValues = {
     winTitle?: ValidationFunction<string>;
     year?: ValidationFunction<number>;
     description?: ValidationFunction<string>;
-    notes?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type WinUpdateFormOverridesProps = {
@@ -31,7 +29,6 @@ export declare type WinUpdateFormOverridesProps = {
     winTitle?: PrimitiveOverrideProps<TextFieldProps>;
     year?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
-    notes?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type WinUpdateFormProps = React.PropsWithChildren<{
     overrides?: WinUpdateFormOverridesProps | undefined | null;

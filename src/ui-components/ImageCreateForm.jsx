@@ -23,20 +23,60 @@ export default function ImageCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    imageID: "",
+    thumbnailID: "",
     name: "",
-    url: "",
+    originalSize: "",
+    description: "",
+    preSignedUrl: "",
+    credits: "",
+    size: "",
+    type: "",
+    createdBy: "",
   };
+  const [imageID, setImageID] = React.useState(initialValues.imageID);
+  const [thumbnailID, setThumbnailID] = React.useState(
+    initialValues.thumbnailID
+  );
   const [name, setName] = React.useState(initialValues.name);
-  const [url, setUrl] = React.useState(initialValues.url);
+  const [originalSize, setOriginalSize] = React.useState(
+    initialValues.originalSize
+  );
+  const [description, setDescription] = React.useState(
+    initialValues.description
+  );
+  const [preSignedUrl, setPreSignedUrl] = React.useState(
+    initialValues.preSignedUrl
+  );
+  const [credits, setCredits] = React.useState(initialValues.credits);
+  const [size, setSize] = React.useState(initialValues.size);
+  const [type, setType] = React.useState(initialValues.type);
+  const [createdBy, setCreatedBy] = React.useState(initialValues.createdBy);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
+    setImageID(initialValues.imageID);
+    setThumbnailID(initialValues.thumbnailID);
     setName(initialValues.name);
-    setUrl(initialValues.url);
+    setOriginalSize(initialValues.originalSize);
+    setDescription(initialValues.description);
+    setPreSignedUrl(initialValues.preSignedUrl);
+    setCredits(initialValues.credits);
+    setSize(initialValues.size);
+    setType(initialValues.type);
+    setCreatedBy(initialValues.createdBy);
     setErrors({});
   };
   const validations = {
+    imageID: [{ type: "Required" }],
+    thumbnailID: [],
     name: [{ type: "Required" }],
-    url: [{ type: "Required" }],
+    originalSize: [],
+    description: [],
+    preSignedUrl: [],
+    credits: [],
+    size: [],
+    type: [],
+    createdBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -64,8 +104,16 @@ export default function ImageCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          imageID,
+          thumbnailID,
           name,
-          url,
+          originalSize,
+          description,
+          preSignedUrl,
+          credits,
+          size,
+          type,
+          createdBy,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -112,6 +160,72 @@ export default function ImageCreateForm(props) {
       {...rest}
     >
       <TextField
+        label="Image id"
+        isRequired={true}
+        isReadOnly={false}
+        value={imageID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID: value,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.imageID ?? value;
+          }
+          if (errors.imageID?.hasError) {
+            runValidationTasks("imageID", value);
+          }
+          setImageID(value);
+        }}
+        onBlur={() => runValidationTasks("imageID", imageID)}
+        errorMessage={errors.imageID?.errorMessage}
+        hasError={errors.imageID?.hasError}
+        {...getOverrideProps(overrides, "imageID")}
+      ></TextField>
+      <TextField
+        label="Thumbnail id"
+        isRequired={false}
+        isReadOnly={false}
+        value={thumbnailID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID: value,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.thumbnailID ?? value;
+          }
+          if (errors.thumbnailID?.hasError) {
+            runValidationTasks("thumbnailID", value);
+          }
+          setThumbnailID(value);
+        }}
+        onBlur={() => runValidationTasks("thumbnailID", thumbnailID)}
+        errorMessage={errors.thumbnailID?.errorMessage}
+        hasError={errors.thumbnailID?.hasError}
+        {...getOverrideProps(overrides, "thumbnailID")}
+      ></TextField>
+      <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
@@ -120,8 +234,16 @@ export default function ImageCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              imageID,
+              thumbnailID,
               name: value,
-              url,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -137,29 +259,243 @@ export default function ImageCreateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Url"
-        isRequired={true}
+        label="Original size"
+        isRequired={false}
         isReadOnly={false}
-        value={url}
+        type="number"
+        step="any"
+        value={originalSize}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize: value,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.originalSize ?? value;
+          }
+          if (errors.originalSize?.hasError) {
+            runValidationTasks("originalSize", value);
+          }
+          setOriginalSize(value);
+        }}
+        onBlur={() => runValidationTasks("originalSize", originalSize)}
+        errorMessage={errors.originalSize?.errorMessage}
+        hasError={errors.originalSize?.hasError}
+        {...getOverrideProps(overrides, "originalSize")}
+      ></TextField>
+      <TextField
+        label="Description"
+        isRequired={false}
+        isReadOnly={false}
+        value={description}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              imageID,
+              thumbnailID,
               name,
-              url: value,
+              originalSize,
+              description: value,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy,
             };
             const result = onChange(modelFields);
-            value = result?.url ?? value;
+            value = result?.description ?? value;
           }
-          if (errors.url?.hasError) {
-            runValidationTasks("url", value);
+          if (errors.description?.hasError) {
+            runValidationTasks("description", value);
           }
-          setUrl(value);
+          setDescription(value);
         }}
-        onBlur={() => runValidationTasks("url", url)}
-        errorMessage={errors.url?.errorMessage}
-        hasError={errors.url?.hasError}
-        {...getOverrideProps(overrides, "url")}
+        onBlur={() => runValidationTasks("description", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, "description")}
+      ></TextField>
+      <TextField
+        label="Pre signed url"
+        isRequired={false}
+        isReadOnly={false}
+        value={preSignedUrl}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl: value,
+              credits,
+              size,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.preSignedUrl ?? value;
+          }
+          if (errors.preSignedUrl?.hasError) {
+            runValidationTasks("preSignedUrl", value);
+          }
+          setPreSignedUrl(value);
+        }}
+        onBlur={() => runValidationTasks("preSignedUrl", preSignedUrl)}
+        errorMessage={errors.preSignedUrl?.errorMessage}
+        hasError={errors.preSignedUrl?.hasError}
+        {...getOverrideProps(overrides, "preSignedUrl")}
+      ></TextField>
+      <TextField
+        label="Credits"
+        isRequired={false}
+        isReadOnly={false}
+        value={credits}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits: value,
+              size,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.credits ?? value;
+          }
+          if (errors.credits?.hasError) {
+            runValidationTasks("credits", value);
+          }
+          setCredits(value);
+        }}
+        onBlur={() => runValidationTasks("credits", credits)}
+        errorMessage={errors.credits?.errorMessage}
+        hasError={errors.credits?.hasError}
+        {...getOverrideProps(overrides, "credits")}
+      ></TextField>
+      <TextField
+        label="Size"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={size}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size: value,
+              type,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.size ?? value;
+          }
+          if (errors.size?.hasError) {
+            runValidationTasks("size", value);
+          }
+          setSize(value);
+        }}
+        onBlur={() => runValidationTasks("size", size)}
+        errorMessage={errors.size?.errorMessage}
+        hasError={errors.size?.hasError}
+        {...getOverrideProps(overrides, "size")}
+      ></TextField>
+      <TextField
+        label="Type"
+        isRequired={false}
+        isReadOnly={false}
+        value={type}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type: value,
+              createdBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.type ?? value;
+          }
+          if (errors.type?.hasError) {
+            runValidationTasks("type", value);
+          }
+          setType(value);
+        }}
+        onBlur={() => runValidationTasks("type", type)}
+        errorMessage={errors.type?.errorMessage}
+        hasError={errors.type?.hasError}
+        {...getOverrideProps(overrides, "type")}
+      ></TextField>
+      <TextField
+        label="Created by"
+        isRequired={false}
+        isReadOnly={false}
+        value={createdBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              imageID,
+              thumbnailID,
+              name,
+              originalSize,
+              description,
+              preSignedUrl,
+              credits,
+              size,
+              type,
+              createdBy: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.createdBy ?? value;
+          }
+          if (errors.createdBy?.hasError) {
+            runValidationTasks("createdBy", value);
+          }
+          setCreatedBy(value);
+        }}
+        onBlur={() => runValidationTasks("createdBy", createdBy)}
+        errorMessage={errors.createdBy?.errorMessage}
+        hasError={errors.createdBy?.hasError}
+        {...getOverrideProps(overrides, "createdBy")}
       ></TextField>
       <Flex
         justifyContent="space-between"
