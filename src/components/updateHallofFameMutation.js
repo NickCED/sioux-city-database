@@ -1,24 +1,31 @@
 import { API } from 'aws-amplify';
 import { updateHallOfFame } from '../graphql/mutations';
-import { getImages } from './SaveImage';
+import { saveImages } from './SaveImage';
 
-const updateHallOfFameMutation = async (e, props, id, ...args) => {
-  const { sportType, notableAchievements, currentImages } = args[0];
+const updateHallOfFameMutation = async (
+  e,
+  props,
+  sportType,
+  notableAchievements,
+  currentImages
+) => {
   try {
-    const uploadingImages = await getImages(currentImages);
+    const uploadingImages = await saveImages(currentImages);
     await API.graphql({
       query: updateHallOfFame,
       variables: {
         input: {
-          name: e.target.name.value,
-          entryType: e.target.entryType.value,
-          inductionYear: e.target.inductionYear.value,
-          sport: sportType,
-          description: e.target.description.value,
-          notableAchievements: notableAchievements,
-          notes: e.target.notes.value,
-          images: uploadingImages,
-          createdBy: props.currentUser,
+          id: props.entry.id,
+          name: e.target.name.value || props.entry.name,
+
+          inductionYear:
+            e.target.inductionYear.value || props.entry.inductionYear || null,
+          sport: sportType || props.entry.sport || '',
+          description: e.target.description.value || '',
+          notableAchievements: notableAchievements || [],
+          notes: e.target.notes.value || '',
+          images: uploadingImages || [],
+          createdBy: props.currentUser || 'unknown user',
         },
       },
     })
@@ -30,6 +37,7 @@ const updateHallOfFameMutation = async (e, props, id, ...args) => {
       });
   } catch (err) {
     console.log('error creating Hall of Fame 1: ', err);
+    window.alert('Error creating Hall of Fame. Please try again.');
   }
 };
 

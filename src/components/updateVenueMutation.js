@@ -1,23 +1,25 @@
 import { API } from 'aws-amplify';
-import { createVenue } from '../graphql/mutations';
+import { updateVenue } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
 
-const createVenueMutation = async (e, props, currentImages) => {
+const updateVenueMutation = async (e, props, currentImages) => {
+  console.log(e.target.location);
   try {
-    console.log('currentImages: ', currentImages);
     const uploadingImages = await saveImages(currentImages);
     await API.graphql({
-      query: createVenue,
+      query: updateVenue,
       variables: {
         input: {
+          id: props.entry.id,
           name: e.target.name.value,
-          entryType: e.target.entryType.value,
-          startYear: e.target.startYear.value,
-          endYear: e.target.endYear.value,
-          location: e.target.location.value,
-          description: e.target.description.value,
-          notes: e.target.notes.value,
-          images: uploadingImages,
+          entryType: props.entry.entryType,
+          startYear: e.target.startYear.value || props.entry.startYear || null,
+          endYear: e.target.endYear.value || props.entry.endYear || null,
+          location: e.target.location.value || props.entry.location || '',
+          description:
+            e.target.description.value || props.entry.description || '',
+          notes: e.target.notes.value || props.entry.notes || '',
+          images: uploadingImages || [],
           createdBy: props.currentUser,
         },
       },
@@ -33,4 +35,4 @@ const createVenueMutation = async (e, props, currentImages) => {
   }
 };
 
-export default createVenueMutation;
+export default updateVenueMutation;

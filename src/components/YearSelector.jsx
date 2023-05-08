@@ -3,7 +3,7 @@ import { SelectField } from '@aws-amplify/ui-react';
 
 export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
   const [options, setOptions] = React.useState([]);
-
+  const currentYear = new Date().getFullYear();
   const [year, setYear] = React.useState(props.initYear);
   const showChange = props.showChange ? props.showChange : false;
   const initialYear =
@@ -41,6 +41,7 @@ export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
         setChangedYear(true);
       }
     }
+
     setYear(e.target.value);
     if (props.onChange) props.onChange(e);
   };

@@ -15,6 +15,7 @@ import { YearSelector } from './YearSelector';
 
 export default function Win(props) {
   const [added, setAdded] = useState(() => {
+    console.log('props.winList', props.winList);
     if (props.winList === undefined) return [];
 
     if (props.winList.length > 0) {
@@ -175,6 +176,7 @@ export default function Win(props) {
                     w.id === win.id ? { ...w, description: e.target.value } : w
                   );
                   setAdded(updatedWins);
+                  props.onDescriptionChange();
                 }}
               />
               <Button

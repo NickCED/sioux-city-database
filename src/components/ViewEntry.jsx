@@ -101,7 +101,10 @@ export default function ViewEntry(props) {
             <IoCloseOutline size={'1.5rem'} pointerEvents={'none'} />
           </Button>
 
-          <Flex className='add-view-contents-1'>
+          <Flex
+            className='add-view-contents-1'
+            justifyContent={'space-between'}
+          >
             <Flex
               className='view-text'
               direction={'column'}
@@ -192,25 +195,26 @@ export default function ViewEntry(props) {
               direction={'column'}
               borderRadius={'0.5rem'}
               minWidth={'50%'}
+              flex={'1'}
               boxShadow={'rgba(0, 0, 0, 0.17) 1px 1px 11px 1px'}
-              flex={'1 1 auto'}
-              maxHeight={'30vh'}
+              height={'35vh'}
+              gap={0}
             >
-              <Flex direction={'column'} height={'90%'}>
-                {viewImages && (
-                  <ViewImages images={viewImages} entry={props.entry} />
-                )}
-              </Flex>
+              {viewImages && (
+                <ViewImages images={viewImages} entry={props.entry} />
+              )}
+
               <Text
                 style={{
                   position: 'relative',
-                  fontSize: '.75rem',
+
                   textAlign: 'center',
-                  bottom: '1.5rem',
                 }}
               >
-                {viewImages.length
-                  ? 'Click an image to enlarge'
+                {props.entry.images.length
+                  ? viewImages.length
+                    ? 'Click on image to enlarge image'
+                    : 'Loading images...'
                   : 'No images uploaded'}
               </Text>
             </Flex>

@@ -1,39 +1,37 @@
 import { API } from 'aws-amplify';
-import { createProfessionalTeam } from '../graphql/mutations';
+import { updateProfessionalTeam } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
-import { v4 as uuidv4 } from 'uuid';
 
-const createProfessionalTeamMutation = async (
+const updateProfessionalTeamMutation = async (
   e,
   props,
   sportType,
   currentImages
 ) => {
-  const uniqueId = uuidv4();
-
   try {
     const uploadingImages = await saveImages(currentImages);
 
     await API.graphql({
-      query: createProfessionalTeam,
+      query: updateProfessionalTeam,
       variables: {
         input: {
           name: e.target.name.value,
-          entryType: e.target.entryType.value,
-          startYear: e.target.startYear.value,
-          endYear: e.target.endYear.value,
-          sport: sportType,
-          teamId: uniqueId,
+          entryType: props.entry.entryType,
+          startYear: e.target.startYear.value || props.entry.startYear || null,
+          endYear: e.target.endYear.value || props.entry.endYear || null,
+
+          teamId: props.entry.teamId,
           description: e.target.description.value,
           notes: e.target.notes.value,
-          images: uploadingImages,
+          images: uploadingImages || [],
           createdBy: props.currentUser,
         },
       },
     });
   } catch (err) {
     console.log('error creating Hall of Fame 1: ', err);
+    window.alert('Error creating Professional Team. Please try again.');
   }
 };
 
-export default createProfessionalTeamMutation;
+export default updateProfessionalTeamMutation;

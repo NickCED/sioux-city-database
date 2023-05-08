@@ -11,7 +11,6 @@ import {
   TextField,
   Divider,
   SelectField,
-  Card,
   Button,
   Alert,
   TextAreaField,
@@ -41,6 +40,7 @@ export default function AddEntry(props) {
   const [notableAchievements, setNotableAchievements] = useState([]);
   const [wins, setWins] = useState([]);
   const [sportType, setSportType] = useState('');
+  const [professionalSport, setProfessionalSport] = useState('');
   const [currentImages, setCurrentImages] = useState([]);
   const [showSubmit, setShowSubmit] = useState(false);
   const [expandedEntryType, setExpandedEntryType] = useState(false);
@@ -166,7 +166,7 @@ export default function AddEntry(props) {
         await createProfessionalTeamMutation(
           event,
           props,
-          sportType,
+          professionalSport,
           currentImages
         );
         break;
@@ -275,7 +275,7 @@ export default function AddEntry(props) {
                     <YearSelector
                       selectName='inductionYear'
                       min={1800}
-                      max={2023}
+                      max={currentYear}
                     />
                   </Flex>
                 )}
@@ -318,9 +318,24 @@ export default function AddEntry(props) {
                     <SelectField
                       name='sport'
                       placeholder='Select Sport or Club Type'
+                      onChange={(e) => {
+                        setProfessionalSport(e.target.value);
+                      }}
                     >
-                      <optgroup label='Sports'></optgroup>
-                      <optgroup label='Clubs'></optgroup>
+                      <optgroup label='Sports'>
+                        {props.professionalData.map((sport) => (
+                          <option key={sport.id} value={sport.id}>
+                            {sport.sport}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label='Clubs'>
+                        {props.clubData.map((club) => (
+                          <option key={club.id} value={club.id}>
+                            {club.sport}
+                          </option>
+                        ))}
+                      </optgroup>
                     </SelectField>
                   </Flex>
                 )}
@@ -341,7 +356,7 @@ export default function AddEntry(props) {
                         selectName='startYear'
                         onChange={onYearStartChange}
                         min={1800}
-                        max={2023}
+                        max={currentYear}
                       />
                     </Flex>
                     <Flex

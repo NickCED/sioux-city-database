@@ -8,8 +8,7 @@ import {
   SwitchField,
 } from '@aws-amplify/ui-react';
 import React from 'react';
-import { API, Hub } from 'aws-amplify';
-import { CONNECTION_STATE_CHANGE, ConnectionState } from '@aws-amplify/pubsub';
+import { API } from 'aws-amplify';
 import { useTable, useSortBy, useFilters } from 'react-table';
 import { useState, useEffect } from 'react';
 import {
@@ -32,6 +31,7 @@ import {
 // import * as mutations from '../graphql/mutations';
 // import * as subscriptions from '../graphql/subscriptions';
 import { useEntrySubscriptions } from './useEntrySubscriptions';
+import { handleKioskReady } from './AllEntries/handleKioskReady';
 
 import { useProfessionalSportSubscriptions } from './useProfessionalSportSubscriptions';
 import { handleDeleteEntry } from './handleDeleteEntry';
@@ -77,7 +77,6 @@ export default function AllEntries(props) {
     console.log('confirm delete');
     if (window.confirm('Are you sure you want to delete this entry?')) {
       handleDeleteEntry(entry);
-      const button = document.getElementById(entry.id + 'button');
     }
   };
 
@@ -140,12 +139,13 @@ export default function AllEntries(props) {
         textAlign: 'center',
         Cell: ({ row }) => (
           <SwitchField
-            checked={row.original.kioskReady}
             label='Kiosk Ready'
-            isDisabled={true}
+            isDisabled={false}
+            defaultChecked={row.original.kioskReady}
             isLabelHidden={true}
-            onClick={() => {
-              return;
+            onChange={(e) => {
+              console.log('kiosk ready', e.target.checked);
+              handleKioskReady(e, row.original);
             }}
           />
         ),
@@ -154,12 +154,8 @@ export default function AllEntries(props) {
         Header: 'View',
         textAlign: 'center',
         Cell: ({ row }) => (
-          <Button
-            border={'none'}
-            size='small'
-            onClick={() => handleViewEntry(row.original)}
-          >
-            <IoEyeOutline size={`${rowHeight}px`} />
+          <Button border={'none'} onClick={() => handleViewEntry(row.original)}>
+            <IoEyeOutline size={rowHeight} />
           </Button>
         ),
       },
@@ -171,11 +167,10 @@ export default function AllEntries(props) {
           return (
             <Button
               border={'none'}
-              size='small'
-              disabled={true}
+              disabled={false}
               onClick={() => handleEditEntry(row.original)}
             >
-              <IoPencilOutline size={`${rowHeight}px`} />
+              <IoPencilOutline size={rowHeight} />
             </Button>
           );
         },
@@ -190,12 +185,12 @@ export default function AllEntries(props) {
             isLoading={false}
             onClick={(e) => confirmDelete(e, row.original)}
           >
-            <IoCloseOutline size={`${rowHeight}px`} />
+            <IoCloseOutline size={rowHeight} />
           </Button>
         ),
       },
     ],
-    [props]
+    [props, rowHeight]
   );
   const tableInstance = useTable({ columns, data }, useFilters, useSortBy);
   const {

@@ -22,5 +22,44 @@
         "siouxcitydata": {}
       }
     }
+  },
+  "testing": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-siouxcityupload-testing-225141-authRole",
+      "UnauthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-siouxcityupload-testing-225141-deployment",
+      "UnauthRoleName": "amplify-siouxcityupload-testing-225141-unauthRole",
+      "StackName": "amplify-siouxcityupload-testing-225141",
+      "StackId": "arn:aws:cloudformation:us-east-2:552976204294:stack/amplify-siouxcityupload-testing-225141/67106470-eb97-11ed-873f-029cc0df17c8",
+      "AmplifyAppId": "d1enb2fhs7o8vx"
+    },
+    "categories": {
+      "auth": {
+        "siouxcityupload9519fe5d": {}
+      },
+      "storage": {
+        "s3siouxcityuploadstorageced": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-siouxcityupload-dev-04132-authRole",
+      "UnauthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-dev-04132-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-dev-04132-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-siouxcityupload-dev-04132-deployment",
+      "UnauthRoleName": "amplify-siouxcityupload-dev-04132-unauthRole",
+      "StackName": "amplify-siouxcityupload-dev-04132",
+      "StackId": "arn:aws:cloudformation:us-east-2:552976204294:stack/amplify-siouxcityupload-dev-04132/49feb810-ebc8-11ed-b204-029cd70e5016",
+      "AmplifyAppId": "d1enb2fhs7o8vx"
+    },
+    "categories": {
+      "auth": {
+        "siouxcityupload9519fe5d": {}
+      }
+    }
   }
 }

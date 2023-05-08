@@ -18,8 +18,8 @@ const createVenueMutation = async (e, props, currentImages) => {
         input: {
           name: e.target.name.value,
           entryType: e.target.entryType.value,
-          startYear: e.target.startYear.value || '',
-          endYear: e.target.endYear.value || '',
+          startYear: e.target.startYear.value || null,
+          endYear: e.target.endYear.value || null,
           location: e.target.location.value || '',
           description: e.target.description.value || '',
           notes: e.target.notes.value || '',

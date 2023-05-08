@@ -11,7 +11,7 @@ import {
   TextField,
   Divider,
   SelectField,
-  Card,
+  Text,
   Button,
   Alert,
   TextAreaField,
@@ -28,6 +28,10 @@ import updateVenueMutation from './updateVenueMutation';
 import { IoCloseOutline } from 'react-icons/io5';
 
 export default function EditEntry(props) {
+  console.log('EditEntry props: ', props.entry);
+  const [hasChanged, setHasChanged] = useState(false);
+
+  const currentYear = new Date().getFullYear();
   const [newName, setNewName] = useState(() => {
     if (props.entry.name) {
       return props.entry.name;
@@ -80,24 +84,32 @@ export default function EditEntry(props) {
   };
 
   const handleAchievementListChange = (notableAchievements) => {
-    console.log('handleAchievementListChange: ', notableAchievements);
     const notableAchievementsArray = notableAchievements.map((achievement) =>
       JSON.stringify(achievement)
     );
-    console.log('handleAchievementListChange: ', notableAchievementsArray);
+    notableAchievementsArray !== props.entry.notableAchievements &&
+      setHasChanged(true);
+    notableAchievementsArray === props.entry.notableAchievements &&
+      setHasChanged(false);
     setNotableAchievements(notableAchievementsArray);
   };
   const handleWinListChange = (wins) => {
     const winsArray = wins.map((win) => JSON.stringify(win));
+    winsArray !== props.entry.wins && setHasChanged(true);
+    winsArray === props.entry.wins && setHasChanged(false);
+
     setWins(winsArray);
   };
+
   const handleFormCancel = (event) => {
     event.preventDefault();
     //handle submit canceling
   };
 
   const handleSubmit = async (event, props) => {
-    switch (event.target.entryType.value) {
+    console.log('submit clicked', props.entry);
+    console.log('name', event.target.name.value);
+    switch (props.entry.entryType) {
       case 'Hall of Fame':
         updateHallOfFameMutation(
           event,
@@ -121,7 +133,8 @@ export default function EditEntry(props) {
           props,
           sportType,
           wins,
-          currentImages
+          currentImages,
+          newName
         );
         break;
       case 'Venue':
@@ -134,11 +147,29 @@ export default function EditEntry(props) {
 
   const onSportTypeChange = (event) => {
     event.preventDefault();
+    newName.includes(sportType)
+      ? setNewName(
+          `${event.target.value} : ${
+            props.schoolData.find((school) => school.id === props.entry.school)
+              .name
+          }`
+        )
+      : console.log('no');
     if (event.target.name === 'selectedSport') {
       setSportType(event.target.value);
-      console.log('sportType: ', event.target.value);
+      event.target.value !== props.entry.sport && setHasChanged(true);
+      event.target.value === props.entry.sport && setHasChanged(false);
     } else if (event.target.name === 'addedSport') {
       setSportType(event.target.value);
+    }
+  };
+  //InductionYear ==============================================================
+
+  const onInductionYearChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'inductionYear') {
+      event.target.value !== props.entry.inductionYear && setHasChanged(true);
+      event.target.value === props.entry.inductionYear && setHasChanged(false);
     }
   };
 
@@ -153,6 +184,8 @@ export default function EditEntry(props) {
     event.preventDefault();
     if (event.target.name === 'startYear') {
       setYearStart(event.target.value);
+      event.target.value !== props.entry.yearStart && setHasChanged(true);
+      event.target.value === props.entry.yearStart && setHasChanged(false);
     }
   };
   //YEAR END ==================================================================
@@ -165,6 +198,9 @@ export default function EditEntry(props) {
   const onYearEndChange = (event) => {
     event.preventDefault();
     if (event.target.name === 'endYear') {
+      event.target.value !== props.entry.yearEnd && setHasChanged(true);
+      event.target.value === props.entry.yearEnd && setHasChanged(false);
+
       setYearEnd(event.target.value);
     }
   };
@@ -235,7 +271,7 @@ export default function EditEntry(props) {
             }}
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit(e);
+              handleSubmit(e, props);
               props.onFormSubmit();
             }}
           >
@@ -248,8 +284,10 @@ export default function EditEntry(props) {
               onChange={(e) => {
                 setNewName(e.target.value);
                 checkEntryNameType(e);
+                e.target.value !== props.entry.name && setHasChanged(true);
+                e.target.value === props.entry.name && setHasChanged(false);
               }}
-              defaultValue={props.entry.name || ''}
+              value={newName || ''}
               placeholder={
                 entryType === 'School'
                   ? 'Team Name or Nick Name'
@@ -261,31 +299,16 @@ export default function EditEntry(props) {
             <Heading level={6} marginTop={'1em'}>
               Entry Type
             </Heading>
-            <SelectField
-              name='entryType'
-              placeholder='Entry Type'
-              defaultValue={props.entry.entryType}
-              onChange={(e) => {
-                setEntryType(e.target.value);
-                checkEntryNameType(e);
+            <Text
+              style={{
+                margin: '.5rem',
               }}
             >
-              <option value='Hall of Fame'>Hall of Fame</option>
-              <option value='Professional Team'>
-                Professional Team or Club
-              </option>
-              <option value='School'>School Sport</option>
-              <option value='Venue'>Sports Venue</option>
-              {/*expand entry type based on selection*/}
-            </SelectField>
+              {props.entry.entryType}
+            </Text>
+
             {expandedEntryType && (
               <div>
-                <Divider
-                  style={{
-                    margin: '1rem 0',
-                  }}
-                ></Divider>
-
                 {entryType === 'Hall of Fame' && (
                   <Flex direction={'column'} gap={'0'}>
                     <Heading level={6} marginTop={'1em'}>
@@ -295,7 +318,9 @@ export default function EditEntry(props) {
                       selectName='inductionYear'
                       initYear={props.entry.inductionYear || ''}
                       min={1800}
-                      max={2023}
+                      max={currentYear}
+                      onChange={onInductionYearChange}
+                      showChange={true}
                     />
                   </Flex>
                 )}
@@ -305,36 +330,17 @@ export default function EditEntry(props) {
                     <Heading level={6} marginTop={'1em'}>
                       School
                     </Heading>
-                    <SelectField
-                      name='school'
-                      placeholder='School'
-                      defaultValue={
+                    <Text style={{ margin: '.5rem' }}>
+                      {
                         props.schoolData.find(
                           (school) => school.id === props.entry.school
-                        ).name || ''
+                        ).name
                       }
-                    >
-                      <optgroup label='High Schools'>
-                        {props.highSchoolData.map((school) => (
-                          <option key={school.id} value={school.id}>
-                            {school.name}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label='Colleges'>
-                        {props.collegeData.map((school) => (
-                          <option key={school.id} value={school.id}>
-                            {school.name}
-                          </option>
-                        ))}
-                      </optgroup>
-                    </SelectField>
+                    </Text>
                   </Flex>
                 )}
 
-                {entryType === 'Professional Team' ||
-                entryType === 'School' ||
-                entryType === 'Hall of Fame' ? (
+                {entryType === 'School' || entryType === 'Hall of Fame' ? (
                   <Flex direction={'column'} gap={'0'}>
                     <Heading level={6} marginTop={'1em'}>
                       Sport
@@ -346,6 +352,49 @@ export default function EditEntry(props) {
                     />
                   </Flex>
                 ) : null}
+
+                {entryType === 'Professional Team' && (
+                  <Flex direction={'column'} gap={'0'}>
+                    <Heading level={6} marginTop={'1em'}>
+                      Professional Sport or Club
+                    </Heading>
+                    <Text style={{ margin: '.5rem' }}>
+                      {
+                        props.sportsData.find(
+                          (sport) => sport.id === props.entry.sport
+                        ).sport
+                      }
+                    </Text>
+
+                    {/* <SelectField
+                      name='sport'
+                      placeholder='Select Sport or Club Type'
+                      defaultValue={props.entry.sport || ''}
+                      onChange={(e) => {
+                        e.target.value !== props.entry.sport &&
+                          setHasChanged(true);
+                        e.target.value === props.entry.sport &&
+                          setHasChanged(false);
+                        e.target.value === '' && setHasChanged(false);
+                      }}
+                    >
+                      <optgroup label='Sports'>
+                        {props.professionalData.map((sport) => (
+                          <option key={sport.id} value={sport.id}>
+                            {sport.sport}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label='Clubs'>
+                        {props.clubData.map((club) => (
+                          <option key={club.id} value={club.id}>
+                            {club.sport}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </SelectField> */}
+                  </Flex>
+                )}
 
                 {entryType === 'School' ||
                 entryType === 'Professional Team' ||
@@ -363,7 +412,7 @@ export default function EditEntry(props) {
                       <YearSelector
                         selectName='startYear'
                         min={1800}
-                        max={2023}
+                        max={currentYear}
                         initYear={props.entry.startYear || ''}
                         onChange={onYearStartChange}
                         showChange={true}
@@ -380,9 +429,10 @@ export default function EditEntry(props) {
                       </Heading>
                       <YearSelector
                         selectName='endYear'
-                        min={yearStart}
-                        max={2023}
+                        min={yearStart || props.entry.yearStart || 1800}
+                        max={currentYear}
                         initYear={props.entry.endYear || ''}
+                        active={props.entry.endYear ? true : false}
                         showChange={true}
                         onChange={onYearEndChange}
                       />
@@ -396,9 +446,15 @@ export default function EditEntry(props) {
                       Location
                     </Heading>
                     <TextField
-                      name='Location'
+                      name='location'
                       defaultValue={props.entry.location || ''}
                       placeholder='Enter the location of the venue'
+                      onChange={(e) => {
+                        e.target.value !== props.entry.location &&
+                          setHasChanged(true);
+                        e.target.value === props.entry.location &&
+                          setHasChanged(false);
+                      }}
                     />
                   </div>
                 )}
@@ -419,6 +475,10 @@ export default function EditEntry(props) {
                   defaultValue={props.entry.description || ''}
                   onChange={(e) => {
                     setDescription(e.target.value);
+                    e.target.value !== props.entry.description &&
+                      setHasChanged(true);
+                    e.target.value === props.entry.description &&
+                      setHasChanged(false);
                   }}
                   placeholder='Description'
                 />
@@ -426,7 +486,10 @@ export default function EditEntry(props) {
                 {entryType === 'School' && (
                   <Win
                     onWinListChange={handleWinListChange}
-                    initWins={props.entry.wins || []}
+                    winList={props.entry.wins || []}
+                    onDescriptionChange={(e) => {
+                      setHasChanged(true);
+                    }}
                   />
                 )}
 
@@ -437,6 +500,11 @@ export default function EditEntry(props) {
                   name='notes'
                   defaultValue={props.entry.notes || ''}
                   placeholder='Additional notes will not be used for display purposes, only internal use'
+                  onChange={(e) => {
+                    e.target.value !== props.entry.notes && setHasChanged(true);
+                    e.target.value === props.entry.notes &&
+                      setHasChanged(false);
+                  }}
                 />
 
                 <FileBrowser
@@ -460,7 +528,7 @@ export default function EditEntry(props) {
               >
                 Cancel
               </Button>
-              <Button isDisabled={!showSubmit} type='submit'>
+              <Button isDisabled={!hasChanged} type='submit'>
                 Submit
               </Button>
             </Flex>

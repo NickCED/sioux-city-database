@@ -25,13 +25,12 @@ export default function ViewImages(props) {
       gap='1rem'
       style={{
         width: '100%',
-        height: '100%',
+        flex: '1 1 auto',
         justifyContent: 'flex-start',
         alignItems: 'center',
         overflowX: 'auto',
         padding: '1rem',
         minWidth: '100%',
-        minHeight: '100%',
       }}
     >
       <dialog

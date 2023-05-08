@@ -96,6 +96,7 @@ function App({ signOut }) {
     }
   }, [schoolData]);
   // ================================================================================================================
+  //Professional Sports
   const [sportsData, setSportsData] = useState([]);
   const [editSportData, setEditSportData] = useState([]);
   const [professionalData, setProfessionalData] = useState([]);
@@ -126,16 +127,14 @@ function App({ signOut }) {
 
       setProfessionalData(sortedProfessionals);
       setClubData(sortedClubs);
+      console.log('sportsData: ', sportsData);
+      console.log('professionalData: ', professionalData);
+      console.log('clubData: ', clubData);
     }
   }, [sportsData]);
 
   // ================================================================================================================
-  // load the data from the database
-  // useEffect(() => {
-  //   const fetchEntries = async () => {
-  //     const response = await API.graphql({query: listVenues});
 
-  //   }
   const [searchText, setSearchText] = useState('');
 
   const [searchDisabled, setSearchDisabled] = useState(false);
@@ -261,7 +260,12 @@ function App({ signOut }) {
             onFormCancel={handleUpdateCancel}
             currentUser={currentUserName}
             entry={editableEntry}
+            highSchoolData={highSchoolData}
+            collegeData={collegeData}
             schoolData={schoolData}
+            sportsData={sportsData}
+            professionalData={professionalData}
+            clubData={clubData}
             onCloseEntry={handleUpdateCancel}
           />
         )}
@@ -275,6 +279,8 @@ function App({ signOut }) {
             onCloseEntry={handleFormCancel}
             highSchoolData={highSchoolData}
             collegeData={collegeData}
+            professionalData={professionalData}
+            clubData={clubData}
           />
         )}
         <div

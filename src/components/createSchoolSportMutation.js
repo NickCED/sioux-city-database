@@ -35,8 +35,8 @@ const createSchoolSportMutation = async (
         input: {
           name: name,
           entryType: e.target.entryType.value,
-          startYear: e.target.startYear.value,
-          endYear: e.target.endYear.value || '',
+          startYear: e.target.startYear.value || null,
+          endYear: e.target.endYear.value || null,
           school: e.target.school.value || '',
           sport: sportType || '',
           sportId: uniqueId,

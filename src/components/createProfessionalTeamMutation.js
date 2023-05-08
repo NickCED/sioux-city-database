@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 const createProfessionalTeamMutation = async (
   e,
   props,
-  sportType,
+  professionalSport,
   currentImages
 ) => {
   const uniqueId = uuidv4();
@@ -23,10 +23,10 @@ const createProfessionalTeamMutation = async (
       variables: {
         input: {
           name: e.target.name.value,
-          entryType: e.target.entryType.value,
-          startYear: e.target.startYear.value || '',
+          entryType: e.target.entryType.value || null,
+          startYear: e.target.startYear.value || null,
           endYear: e.target.endYear.value || '',
-          sport: sportType || '',
+          sport: professionalSport || '',
           teamId: uniqueId,
           description: e.target.description.value || '',
           notes: e.target.notes.value || '',
