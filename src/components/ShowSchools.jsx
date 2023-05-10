@@ -5,25 +5,10 @@ import { IoAddOutline, IoPencilOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 
 export default function ShowSchools(props) {
-  const [sortedSchools, setSortedSchools] = useState([]);
-  const schools = props.data;
-  useEffect(() => {
-    if (schools) {
-      const highSchools = schools.filter((school) =>
-        school.name.includes('High School')
-      );
-      const colleges = schools.filter((school) =>
-        school.name.includes('College')
-      );
-
-      const sortByName = (a, b) => a.name.localeCompare(b.name);
-
-      const sortedHighSchools = highSchools.sort(sortByName);
-      const sortedColleges = colleges.sort(sortByName);
-
-      setSortedSchools([...sortedHighSchools, ...sortedColleges]);
-    }
-  }, [schools]);
+  const [sortedSchools, setSortedSchools] = useState([
+    ...props.highSchoolData,
+    ...props.collegeData,
+  ]);
 
   const handleAddSchool = async () => {
     console.log('add school');

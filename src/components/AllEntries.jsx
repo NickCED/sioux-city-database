@@ -214,8 +214,8 @@ export default function AllEntries(props) {
           {/* <TabItem
             title='Schools'
             onClick={() => handleTabChange('Schools')}
-          ></TabItem>
-          <TabItem
+          ></TabItem> */}
+          {/* <TabItem
             title='Professional Sports'
             onClick={() => handleTabChange('Professional Sports')}
           ></TabItem> */}
@@ -356,17 +356,20 @@ export default function AllEntries(props) {
           </table>
         </div>
       )}
-      {/* {selectedTab === 'Schools' && (
+      {selectedTab === 'Schools' && (
         <div
           style={{
             flex: '1 1 auto',
             overflowY: 'auto',
           }}
         >
-          <ShowSchools data={[...props.highSchoolData, ...props.collegeData]} />
+          <ShowSchools
+            schoolData={props.schoolData}
+            onEditSchool={(school) => props.onEditSchool(school)}
+          />
         </div>
       )}
-      {selectedTab === 'Professional Sports' && (
+      {/* {selectedTab === 'Professional Sports' && (
         <div
           style={{
             flex: '1 1 auto',

@@ -1,8 +1,7 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import { SelectField } from '@aws-amplify/ui-react';
 
 export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
-  const [options, setOptions] = React.useState([]);
   const currentYear = new Date().getFullYear();
   const [year, setYear] = React.useState(props.initYear);
   const showChange = props.showChange ? props.showChange : false;

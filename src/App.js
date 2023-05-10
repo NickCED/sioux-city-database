@@ -10,6 +10,7 @@ import NavBar from './components/NavBar';
 import AddEntry from './components/AddEntry';
 import EditEntry from './components/EditEntry';
 import ViewEntry from './components/ViewEntry';
+import EditSchool from './components/EditSchool';
 import AllEntries from './components/AllEntries';
 import { listProfessionalSports } from './graphql/queries';
 import EditProfessionalSport from './components/EditProfessionalSport';
@@ -38,13 +39,13 @@ function App({ signOut }) {
           case '3df3e384-e4d1-4715-bb0d-1e684054d411':
             username = 'Admin: N Smith';
             break;
-          case '55b8880e-824d-4f4f-8906-3445b60a24e8':
+          case ' a7f0f8db-8f0b-429a-970b-0e3288d39566':
             username = 'T Munson';
             break;
           case 'dc8bf206-5432-4ad6-8e67-d3d2b11fee12':
             username = 'H Aguirre';
             break;
-          case 'ee608651-8a55-44d2-a151-16a30eae135f':
+          case '434ba226-08fe-4b0d-b6a6-7960e02ad174':
             username = 'D Mayo';
             break;
           default:
@@ -62,7 +63,10 @@ function App({ signOut }) {
   }, []);
 
   // ================================================================================================================
-  //School Subscriptions
+  //School
+  const [showEditSchool, setShowEditSchool] = useState(false);
+  const [editSchoolData, setEditSchoolData] = useState();
+
   const { schoolData, setSchoolData } = useSchoolSubscriptions();
   const [highSchoolData, setHighSchoolData] = useState([]);
   const [collegeData, setCollegeData] = useState([]);
@@ -95,6 +99,13 @@ function App({ signOut }) {
       setCollegeData(sortedColleges);
     }
   }, [schoolData]);
+
+  const handleEditSchool = (school) => {
+    setEditSchoolData(school);
+  };
+  const handleSchoolCancel = () => {};
+  const handleSchoolSubmit = () => {};
+
   // ================================================================================================================
   //Professional Sports
   const [sportsData, setSportsData] = useState([]);
@@ -103,14 +114,23 @@ function App({ signOut }) {
   const [clubData, setClubData] = useState([]);
 
   useEffect(() => {
-    const fetchProfessionalSports = async () => {
-      const professionalSportsData = await API.graphql({
-        query: listProfessionalSports,
-      });
+    try {
+      const fetchProfessionalSports = async () => {
+        const professionalSportsData = await API.graphql({
+          query: listProfessionalSports,
+        });
 
-      setSportsData(professionalSportsData.data.listProfessionalSports.items);
-    };
-    fetchProfessionalSports();
+        setSportsData(professionalSportsData.data.listProfessionalSports.items);
+        console.log(
+          'professionalSportsData: ',
+          professionalSportsData.data.listProfessionalSports.items
+        );
+      };
+
+      fetchProfessionalSports();
+    } catch (e) {
+      console.log(e);
+    }
   }, []);
 
   useEffect(() => {
@@ -131,7 +151,7 @@ function App({ signOut }) {
       console.log('professionalData: ', professionalData);
       console.log('clubData: ', clubData);
     }
-  }, [sportsData]);
+  }, []);
 
   // ================================================================================================================
 
@@ -235,6 +255,17 @@ function App({ signOut }) {
           flexDirection: 'column',
         }}
       >
+        {showEditSchool && (
+          <EditSchool
+            onFormSubmit={handleSchoolSubmit}
+            onFormCancel={handleSchoolCancel}
+            currentUser={currentUserName}
+            onCloseEntry={handleSchoolCancel}
+            highSchoolData={highSchoolData}
+            collegeData={collegeData}
+            school={editSchoolData}
+          />
+        )}
         {showEditProfessionalSport && (
           <EditProfessionalSport
             onFormSubmit={handleProfessionalSubmit}
@@ -304,6 +335,7 @@ function App({ signOut }) {
             onViewEntry={handleAddViewEntry}
             searchText={searchText}
             onTabChange={handleTabChange}
+            schoolData={schoolData}
             highSchoolData={highSchoolData}
             collegeData={collegeData}
             professionalData={professionalData}
@@ -311,6 +343,7 @@ function App({ signOut }) {
             onEditProfessionalSport={(sport) =>
               handleAddProfessionalSport(sport)
             }
+            onEditSchool={handleEditSchool}
           />
         </div>
       </div>
