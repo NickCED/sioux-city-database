@@ -81,6 +81,7 @@ export default function EditEntry(props) {
   const handleImageListChange = (filesList) => {
     console.log('handleImageListChange: ', filesList);
     setCurrentImages(filesList);
+    setHasChanged(true);
   };
 
   const handleAchievementListChange = (notableAchievements) => {

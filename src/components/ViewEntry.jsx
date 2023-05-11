@@ -188,6 +188,12 @@ export default function ViewEntry(props) {
                   </Text>
                 </Flex>
               )}
+              {props.entry.entryType === 'Venue' && (
+                <Flex className='space-between'>
+                  <Text fontWeight={'bold'}>Capacity:</Text>
+                  <Text>{props.entry.location}</Text>
+                </Flex>
+              )}
               {/*====================================================================================================*/}
             </Flex>
             <Flex

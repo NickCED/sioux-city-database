@@ -16,6 +16,21 @@ const createHallOfFameMutation = async (
       'Images',
       props.currentUser
     );
+    return uploadingImages; //
+  } catch (err) {
+    console.log('error uploading these images : ', err);
+    window.alert(
+      'There was an error uploading these images, please try deleting and reuploading. '
+    );
+    return; //this is to stop the function from continuing if there is an error
+  }
+
+  try {
+    const uploadingImages = await saveImages(
+      currentImages,
+      'Images',
+      props.currentUser
+    );
     await API.graphql({
       query: createHallOfFame,
       variables: {
