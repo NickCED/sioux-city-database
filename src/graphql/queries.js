@@ -7,7 +7,10 @@ export const getSchool = /* GraphQL */ `
       name
       logoUrl
       description
+      location
       sportsIds
+      startYear
+      endYear
       notes
       createdBy
       kioskReady
@@ -28,7 +31,10 @@ export const listSchools = /* GraphQL */ `
         name
         logoUrl
         description
+        location
         sportsIds
+        startYear
+        endYear
         notes
         createdBy
         kioskReady
@@ -153,6 +159,7 @@ export const getProfessionalTeam = /* GraphQL */ `
       endYear
       sport
       teamId
+      wins
       description
       images
       notes
@@ -185,6 +192,7 @@ export const listProfessionalTeams = /* GraphQL */ `
         endYear
         sport
         teamId
+        wins
         description
         images
         notes
@@ -324,6 +332,7 @@ export const getImage = /* GraphQL */ `
       name
       originalSize
       description
+      preSignedUrl
       credits
       size
       type
@@ -354,6 +363,7 @@ export const listImages = /* GraphQL */ `
         name
         originalSize
         description
+        preSignedUrl
         credits
         size
         type

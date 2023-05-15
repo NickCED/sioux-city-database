@@ -17,7 +17,10 @@ export declare type SchoolUpdateFormInputValues = {
     name?: string;
     logoUrl?: string;
     description?: string;
+    location?: string;
     sportsIds?: string[];
+    startYear?: number;
+    endYear?: number;
     notes?: string;
     createdBy?: string;
     kioskReady?: boolean;
@@ -26,7 +29,10 @@ export declare type SchoolUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
     logoUrl?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
+    location?: ValidationFunction<string>;
     sportsIds?: ValidationFunction<string>;
+    startYear?: ValidationFunction<number>;
+    endYear?: ValidationFunction<number>;
     notes?: ValidationFunction<string>;
     createdBy?: ValidationFunction<string>;
     kioskReady?: ValidationFunction<boolean>;
@@ -37,7 +43,10 @@ export declare type SchoolUpdateFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     logoUrl?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
+    location?: PrimitiveOverrideProps<TextFieldProps>;
     sportsIds?: PrimitiveOverrideProps<TextFieldProps>;
+    startYear?: PrimitiveOverrideProps<TextFieldProps>;
+    endYear?: PrimitiveOverrideProps<TextFieldProps>;
     notes?: PrimitiveOverrideProps<TextFieldProps>;
     createdBy?: PrimitiveOverrideProps<TextFieldProps>;
     kioskReady?: PrimitiveOverrideProps<SwitchFieldProps>;

@@ -25,7 +25,6 @@ export default function FileBrowser({
   const [buttonText, setButtonText] = useState('Upload Image');
 
   useEffect(() => {
-    console.log('props.viewIds', props.viewIds);
     if (props.viewIds) {
       if (props.viewIds.length === 0) return;
       async function getImagesFromS3() {

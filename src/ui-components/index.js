@@ -5,6 +5,7 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
+export { default as CreateEntry } from "./CreateEntry";
 export { default as SchoolCreateForm } from "./SchoolCreateForm";
 export { default as SchoolUpdateForm } from "./SchoolUpdateForm";
 export { default as SchoolSportCreateForm } from "./SchoolSportCreateForm";

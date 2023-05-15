@@ -196,7 +196,10 @@ export default function SchoolCreateForm(props) {
     name: "",
     logoUrl: "",
     description: "",
+    location: "",
     sportsIds: [],
+    startYear: "",
+    endYear: "",
     notes: "",
     createdBy: "",
     kioskReady: false,
@@ -206,7 +209,10 @@ export default function SchoolCreateForm(props) {
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [location, setLocation] = React.useState(initialValues.location);
   const [sportsIds, setSportsIds] = React.useState(initialValues.sportsIds);
+  const [startYear, setStartYear] = React.useState(initialValues.startYear);
+  const [endYear, setEndYear] = React.useState(initialValues.endYear);
   const [notes, setNotes] = React.useState(initialValues.notes);
   const [createdBy, setCreatedBy] = React.useState(initialValues.createdBy);
   const [kioskReady, setKioskReady] = React.useState(initialValues.kioskReady);
@@ -215,8 +221,11 @@ export default function SchoolCreateForm(props) {
     setName(initialValues.name);
     setLogoUrl(initialValues.logoUrl);
     setDescription(initialValues.description);
+    setLocation(initialValues.location);
     setSportsIds(initialValues.sportsIds);
     setCurrentSportsIdsValue("");
+    setStartYear(initialValues.startYear);
+    setEndYear(initialValues.endYear);
     setNotes(initialValues.notes);
     setCreatedBy(initialValues.createdBy);
     setKioskReady(initialValues.kioskReady);
@@ -228,7 +237,10 @@ export default function SchoolCreateForm(props) {
     name: [{ type: "Required" }],
     logoUrl: [],
     description: [],
+    location: [],
     sportsIds: [],
+    startYear: [],
+    endYear: [],
     notes: [],
     createdBy: [],
     kioskReady: [],
@@ -262,7 +274,10 @@ export default function SchoolCreateForm(props) {
           name,
           logoUrl,
           description,
+          location,
           sportsIds,
+          startYear,
+          endYear,
           notes,
           createdBy,
           kioskReady,
@@ -323,7 +338,10 @@ export default function SchoolCreateForm(props) {
               name: value,
               logoUrl,
               description,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes,
               createdBy,
               kioskReady,
@@ -353,7 +371,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl: value,
               description,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes,
               createdBy,
               kioskReady,
@@ -383,7 +404,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description: value,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes,
               createdBy,
               kioskReady,
@@ -401,6 +425,39 @@ export default function SchoolCreateForm(props) {
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
       ></TextField>
+      <TextField
+        label="Location"
+        isRequired={false}
+        isReadOnly={false}
+        value={location}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              location: value,
+              sportsIds,
+              startYear,
+              endYear,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.location ?? value;
+          }
+          if (errors.location?.hasError) {
+            runValidationTasks("location", value);
+          }
+          setLocation(value);
+        }}
+        onBlur={() => runValidationTasks("location", location)}
+        errorMessage={errors.location?.errorMessage}
+        hasError={errors.location?.hasError}
+        {...getOverrideProps(overrides, "location")}
+      ></TextField>
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -409,7 +466,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description,
+              location,
               sportsIds: values,
+              startYear,
+              endYear,
               notes,
               createdBy,
               kioskReady,
@@ -450,6 +510,80 @@ export default function SchoolCreateForm(props) {
         ></TextField>
       </ArrayField>
       <TextField
+        label="Start year"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={startYear}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              location,
+              sportsIds,
+              startYear: value,
+              endYear,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.startYear ?? value;
+          }
+          if (errors.startYear?.hasError) {
+            runValidationTasks("startYear", value);
+          }
+          setStartYear(value);
+        }}
+        onBlur={() => runValidationTasks("startYear", startYear)}
+        errorMessage={errors.startYear?.errorMessage}
+        hasError={errors.startYear?.hasError}
+        {...getOverrideProps(overrides, "startYear")}
+      ></TextField>
+      <TextField
+        label="End year"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={endYear}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              logoUrl,
+              description,
+              location,
+              sportsIds,
+              startYear,
+              endYear: value,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.endYear ?? value;
+          }
+          if (errors.endYear?.hasError) {
+            runValidationTasks("endYear", value);
+          }
+          setEndYear(value);
+        }}
+        onBlur={() => runValidationTasks("endYear", endYear)}
+        errorMessage={errors.endYear?.errorMessage}
+        hasError={errors.endYear?.hasError}
+        {...getOverrideProps(overrides, "endYear")}
+      ></TextField>
+      <TextField
         label="Notes"
         isRequired={false}
         isReadOnly={false}
@@ -461,7 +595,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes: value,
               createdBy,
               kioskReady,
@@ -491,7 +628,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes,
               createdBy: value,
               kioskReady,
@@ -521,7 +661,10 @@ export default function SchoolCreateForm(props) {
               name,
               logoUrl,
               description,
+              location,
               sportsIds,
+              startYear,
+              endYear,
               notes,
               createdBy,
               kioskReady: value,

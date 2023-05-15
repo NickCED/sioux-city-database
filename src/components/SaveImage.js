@@ -100,7 +100,6 @@ export async function getImages(
   const images = [];
 
   for (const imageID of imageIds) {
-    console.log('imageID : ', imageID);
     const key = `${location}/${imageID}`;
 
     const getOptions = {
@@ -114,7 +113,6 @@ export async function getImages(
         result = await Storage.get(key, getOptions);
       } catch (error) {
         throw error;
-        console.log('Error downloading image:', error);
       }
 
       const { data } = await API.graphql({
@@ -126,7 +124,7 @@ export async function getImages(
 
       const thumbnailKey = `${location}/${data.getImage.thumbnailID}`;
       const thumbnailResult = await Storage.get(thumbnailKey, getOptions);
-      console.log('imageResult : ', data.getImage);
+
       const image = {
         imageID: data.getImage.imageID,
         thumbnailID: data.getImage.thumbnailID,
@@ -153,7 +151,6 @@ export async function getImages(
 //Delete Images
 //=======================================================
 export async function deleteImages(imageIds, location = 'Images') {
-  console.log('deleting images : ', imageIds);
   if (imageIds === null || imageIds === undefined) return;
   if (imageIds.length > 0) {
     const imageOperations = [];

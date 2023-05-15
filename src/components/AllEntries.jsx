@@ -153,6 +153,7 @@ export default function AllEntries(props) {
       {
         Header: 'View',
         textAlign: 'center',
+        minWidth: '70px',
         Cell: ({ row }) => (
           <Button border={'none'} onClick={() => handleViewEntry(row.original)}>
             <IoEyeOutline size={rowHeight} />
@@ -163,6 +164,7 @@ export default function AllEntries(props) {
       {
         Header: 'Edit',
         textAlign: 'center',
+        minWidth: '70px',
         Cell: ({ row }) => {
           return (
             <Button
@@ -178,6 +180,7 @@ export default function AllEntries(props) {
       {
         Header: 'Delete',
         textAlign: 'center',
+        minWidth: '70px',
         Cell: ({ row }) => (
           <Button
             border={'none'}

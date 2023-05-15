@@ -11,12 +11,15 @@ import './ShowSchools.css';
 import { IoAddOutline, IoPencilOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { handleKioskReady } from './AllEntries/handleKioskReady';
+
 export default function ShowSchools(props) {
   const [sortedSchools, setSortedSchools] = useState([
     ...props.highSchoolData,
     ...props.collegeData,
   ]);
-
+  useEffect(() => {
+    setSortedSchools([...props.highSchoolData, ...props.collegeData]);
+  }, [props.highSchoolData, props.collegeData]);
   const handleAddSchool = async () => {
     console.log('add school');
     console.log('props.data', props.data);

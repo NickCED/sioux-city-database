@@ -14,6 +14,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { YearSelector } from './YearSelector';
 import './EditSchool.css';
 import missingImage from '../images/ImagePlaceHolder.png';
+import updateSchoolMutation from './updateSchoolMutation';
 
 export default function EditSchool(props) {
   const [currentLogo, setCurrentLogo] = useState();
@@ -21,16 +22,31 @@ export default function EditSchool(props) {
     setCurrentLogo(filesList[0] || null);
     setHasChanged(true);
   };
-  const handleSubmit = (e, props) => {};
-  const handleFormCancel = (e) => {};
+  const handleSubmit = async (e, props) => {
+    let awaitEvent;
+    try {
+      awaitEvent = await updateSchoolMutation(e, props, currentLogo);
+      const addViewContainer = document.querySelector('.edit-school');
+      addViewContainer.classList.add('edit-school-reverse');
+
+      addViewContainer.addEventListener('animationend', () => {
+        props.onFormSubmit();
+      });
+    } catch (error) {
+      console.log('error', error);
+      window.alert('Error updating school');
+    }
+  };
 
   const currentYear = new Date().getFullYear();
   const [hasChanged, setHasChanged] = React.useState(false);
   const [showSubmit, setShowSubmit] = React.useState(false);
   const handleCloseEditSchool = (e) => {
+    console.log('e.target', e.target);
     if (
       e.target.classList.contains('edit-school') ||
-      e.target.classList.contains('close-icon')
+      e.target.classList.contains('close-icon') ||
+      e.target.classList.contains('cancel-edit-school')
     ) {
       const addViewContainer = document.querySelector('.edit-school');
       addViewContainer.classList.add('edit-school-reverse');
@@ -118,6 +134,7 @@ export default function EditSchool(props) {
                   selectName='startYear'
                   onChange={onYearStartChange}
                   min={1800}
+                  showChange={true}
                   max={currentYear}
                   initYear={props.school.startYear || ''}
                 />
@@ -135,7 +152,7 @@ export default function EditSchool(props) {
                   selectName='endYear'
                   min={yearStart || props.school.startYear || 1800}
                   max={currentYear}
-                  active={props.school.endYear ? true : false}
+                  active={true}
                   showChange={true}
                   initYear={props.school.endYear || ''}
                   onChange={onYearEndChange}
@@ -146,6 +163,7 @@ export default function EditSchool(props) {
               singleFile={true}
               onFilesListChange={handleLogoListChange}
               heading='Add A Logo Image'
+              viewIds={[props.school.logoUrl] || []}
               placeholder='Enter a title to use for the image'
             />
             <Heading level={6} marginTop={'1em'}>
@@ -174,10 +192,8 @@ export default function EditSchool(props) {
             ></Divider>
             <Flex justifyContent={'space-between'}>
               <Button
-                onClick={(e) => {
-                  handleFormCancel(e);
-                  props.onFormCancel();
-                }}
+                className='cancel-edit-school'
+                onClick={handleCloseEditSchool}
               >
                 Cancel
               </Button>

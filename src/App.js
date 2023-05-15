@@ -97,6 +97,7 @@ function App({ signOut }) {
 
       setHighSchoolData(sortedHighSchools);
       setCollegeData(sortedColleges);
+      console.log('schoolData: ', schoolData);
     }
   }, [schoolData]);
 
@@ -108,7 +109,10 @@ function App({ signOut }) {
     setShowEditSchool(false);
     setEditSchoolData();
   };
-  const handleSchoolSubmit = () => {};
+  const handleSchoolSubmit = () => {
+    setShowEditSchool(false);
+    setEditSchoolData();
+  };
 
   // ================================================================================================================
   //Professional Sports

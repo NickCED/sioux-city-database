@@ -7,7 +7,10 @@ export const onCreateSchool = /* GraphQL */ `
       name
       logoUrl
       description
+      location
       sportsIds
+      startYear
+      endYear
       notes
       createdBy
       kioskReady
@@ -23,7 +26,10 @@ export const onUpdateSchool = /* GraphQL */ `
       name
       logoUrl
       description
+      location
       sportsIds
+      startYear
+      endYear
       notes
       createdBy
       kioskReady
@@ -39,7 +45,10 @@ export const onDeleteSchool = /* GraphQL */ `
       name
       logoUrl
       description
+      location
       sportsIds
+      startYear
+      endYear
       notes
       createdBy
       kioskReady
@@ -189,6 +198,7 @@ export const onCreateProfessionalTeam = /* GraphQL */ `
       endYear
       sport
       teamId
+      wins
       description
       images
       notes
@@ -210,6 +220,7 @@ export const onUpdateProfessionalTeam = /* GraphQL */ `
       endYear
       sport
       teamId
+      wins
       description
       images
       notes
@@ -231,6 +242,7 @@ export const onDeleteProfessionalTeam = /* GraphQL */ `
       endYear
       sport
       teamId
+      wins
       description
       images
       notes
@@ -402,6 +414,7 @@ export const onCreateImage = /* GraphQL */ `
       name
       originalSize
       description
+      preSignedUrl
       credits
       size
       type
@@ -419,6 +432,7 @@ export const onUpdateImage = /* GraphQL */ `
       name
       originalSize
       description
+      preSignedUrl
       credits
       size
       type
@@ -436,6 +450,7 @@ export const onDeleteImage = /* GraphQL */ `
       name
       originalSize
       description
+      preSignedUrl
       credits
       size
       type

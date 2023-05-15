@@ -2,18 +2,12 @@ import { API } from 'aws-amplify';
 import { updateSchool } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
 
-const updateSchoolMutation = async (
-  e,
-  props,
-  sportType,
-  notableAchievements,
-  currentImages
-) => {
-  let uploadingImages;
+const updateSchoolMutation = async (e, props, currentLogo) => {
   try {
+    let uploadingImages;
     try {
       uploadingImages = await saveImages(
-        currentImages,
+        [currentLogo],
         'Images',
         props.currentUser
       );
@@ -24,27 +18,26 @@ const updateSchoolMutation = async (
       );
       throw error; // Throw the error to stop further execution
     }
+
     const response = await API.graphql({
       query: updateSchool,
       variables: {
         input: {
-          id: props.entry.id,
-          name: e.target.name.value || props.entry.name,
-          startYear: e.target.startYear.value || props.entry.startYear || null,
-          endYear: e.target.endYear.value || props.entry.endYear || null,
-          sport: sportType || props.entry.sport || '',
+          id: props.school.id,
+          location: e.target.location.value || '',
+          startYear: e.target.startYear.value || props.school.startYear || null,
+          endYear: e.target.endYear.value || props.school.endYear || null,
           description: e.target.description.value || '',
-
           notes: e.target.notes.value || '',
-          images: uploadingImages || [],
-          createdBy: props.currentUser || 'unknown user',
+          logoUrl: uploadingImages[0] || '[]',
+          createdBy: props.currentUser,
         },
       },
     });
     return response.data;
   } catch (err) {
-    console.log('error updating School: ', err);
-    window.alert('Error Updating School. Please try again.');
+    console.log('error creating School : ', err);
+    window.alert('Error creating School. Please try again.');
     return Promise.reject(err);
   }
 };

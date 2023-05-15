@@ -73,7 +73,53 @@ export default function Win(props) {
     setAdded(updatedWinsList);
     props.onWinListChange(updatedWinsList);
   };
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
+  function handleDragStart(e, index) {
+    setDraggingIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', null);
+  }
+
+  function handleDragEnter(e, index) {
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+    Array.from(e.currentTarget.children).forEach(
+      (child) => (child.style.pointerEvents = 'none')
+    );
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function handleDragLeave(e) {
+    e.currentTarget.classList.remove('drag-over');
+    Array.from(e.currentTarget.children).forEach(
+      (child) => (child.style.pointerEvents = 'auto')
+    );
+  }
+
+  function handleDrop(e, index) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+
+    const newAdded = [...added];
+    const draggedFile = newAdded[draggingIndex];
+    newAdded.splice(draggingIndex, 1);
+    newAdded.splice(index, 0, draggedFile);
+    Array.from(e.currentTarget.children).forEach(
+      (child) => (child.style.pointerEvents = 'auto')
+    );
+    setDraggingIndex(null);
+
+    setAdded(newAdded);
+    props.onWinListChange(newAdded);
+  }
+  function handleDragEnd(e) {
+    setDraggingIndex(null);
+  }
   return (
     <div
       className='wins'
@@ -104,66 +150,95 @@ export default function Win(props) {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
-            marginTop: '0.5rem',
+            marginTop: '0.25rem',
             alignItems: 'center',
             gap: '0.5rem',
+            border: '1px solid #b07c02',
+            paddingLeft: '0.25rem',
+            borderRadius: '0.25rem',
+            cursor: 'grab',
           }}
+          draggable
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragEnter={(e) => handleDragEnter(e, index)}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, index)}
+          onDragEnd={handleDragEnd}
         >
-          {win.year !== '' && (
-            <Text
-              className='win-text'
+          <Flex
+            justifyContent={'space-between'}
+            width={'100%'}
+            style={{
+              cursor: 'grab',
+            }}
+          >
+            <Flex flex={1} width={'60%'} gap={'0'} alignItems={'center'}>
+              <Text
+                className='win-text'
+                style={{
+                  fontWeight: 'medium',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  marginRight: '0.5rem',
+                  cursor: 'pointer',
+                }}
+              >
+                {win.year !== '' && (
+                  <span
+                    style={{
+                      color: 'rgb(176, 124, 2)',
+                      padding: '.5rem',
+                    }}
+                  >
+                    {win.year}
+                  </span>
+                )}{' '}
+                {win.text}
+              </Text>
+            </Flex>
+            <Flex
               style={{
-                fontWeight: 'medium',
-                color: '#b07c02',
-                marginRight: '0.5rem',
+                flex: '1 1 0',
+                justifyContent: 'flex-end',
+                gap: '.25rem',
               }}
             >
-              {win.year}
-            </Text>
-          )}
-
-          <Text
-            className={win.year !== '' ? '' : 'win-text'}
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              maxWidth: '100%',
-            }}
-          >
-            {win.text}
-          </Text>
-          <Button
-            border={'none'}
-            onClick={() => {
-              editWinName(win.id);
-            }}
-          >
-            <IoPencilOutline size='1.25rem' />
-          </Button>
-          <Button
-            border={'none'}
-            onClick={() => {
-              setShowDescriptionEditor(
-                win.id === showDescriptionEditor ? null : win.id
-              );
-            }}
-            color={'#006dff'}
-            fontWeight={'300'}
-            textDecoration={'underline'}
-            size='small'
-          >
-            {win.description ? 'Edit Description' : 'Add Description'}
-          </Button>
-
-          <Button
-            border={'none'}
-            onClick={() => {
-              removeWin(win.id);
-            }}
-          >
-            <IoCloseOutline size='1.5rem' />
-          </Button>
+              <Button
+                border={'none'}
+                padding={' .25rem'}
+                onClick={() => {
+                  editWinName(win.id);
+                }}
+              >
+                <IoPencilOutline size='1.25rem' />
+              </Button>
+              <Button
+                border={'none'}
+                onClick={() => {
+                  setShowDescriptionEditor(
+                    win.id === showDescriptionEditor ? null : win.id
+                  );
+                }}
+                color={'#006dff'}
+                fontWeight={'300'}
+                textDecoration={'underline'}
+                size='small'
+              >
+                {win.description ? 'Edit Description' : 'Add Description'}
+              </Button>
+              <Button
+                border={'none'}
+                padding={' .5rem'}
+                onClick={() => {
+                  removeWin(win.id);
+                }}
+              >
+                <IoCloseOutline size='1.5rem' />
+              </Button>
+            </Flex>
+          </Flex>
           {showDescriptionEditor === win.id && (
             <Flex basis={'100%'} alignItems={'center'}>
               <TextAreaField

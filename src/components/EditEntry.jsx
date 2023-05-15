@@ -84,6 +84,9 @@ export default function EditEntry(props) {
     setHasChanged(true);
   };
 
+  const handleReorder = () => {
+    setHasChanged(true);
+  };
   const handleAchievementListChange = (notableAchievements) => {
     const notableAchievementsArray = notableAchievements.map((achievement) =>
       JSON.stringify(achievement)
@@ -438,7 +441,7 @@ export default function EditEntry(props) {
                         min={yearStart || props.entry.startYear || 1800}
                         max={currentYear}
                         initYear={props.entry.endYear || ''}
-                        active={props.entry.endYear ? true : false}
+                        active={true}
                         showChange={true}
                         onChange={onYearEndChange}
                       />
@@ -469,6 +472,7 @@ export default function EditEntry(props) {
                     <NoteAchievement
                       onAchievementListChange={handleAchievementListChange}
                       achievementList={props.entry.notableAchievements || []}
+                      onReorder={handleReorder}
                     />
                   </Flex>
                 )}
@@ -496,6 +500,7 @@ export default function EditEntry(props) {
                     onDescriptionChange={(e) => {
                       setHasChanged(true);
                     }}
+                    onReorder={handleReorder}
                   />
                 )}
 
