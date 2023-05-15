@@ -20,6 +20,7 @@ export default function FileBrowser({
   const componentID = uuidv4();
   const singleFile = props.singleFile || false;
   const [filesList, setFilesList] = useState([]);
+  const [deleteFilesList, setDeleteFilesList] = useState([]);
   const inputRef = React.useRef();
   const [newImage, setNewImage] = useState('');
   const [buttonText, setButtonText] = useState('Upload Image');
@@ -41,10 +42,15 @@ export default function FileBrowser({
     const updatedFilesList = filesList.filter(
       (file) => file.imageID !== imageID
     );
+    const updatedDeletedFilesList = filesList.filter(
+      (file) => file.imageID === imageID
+    );
+    setDeleteFilesList(updatedDeletedFilesList);
     setFilesList(updatedFilesList);
     if (updatedFilesList.length === 0 && singleFile) {
       setButtonText('Upload Image');
     }
+    props.onDeletedFilesListChange(updatedDeletedFilesList);
     props.onFilesListChange(updatedFilesList);
   };
 

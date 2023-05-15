@@ -54,6 +54,7 @@ export default function EditEntry(props) {
   });
 
   const [currentImages, setCurrentImages] = useState([]);
+  const [currentImagesToDelete, setCurrentImagesToDelete] = useState([]);
   const [wins, setWins] = useState([]);
   const [showSubmit, setShowSubmit] = useState(false);
   const [expandedEntryType, setExpandedEntryType] = useState(true);
@@ -82,6 +83,11 @@ export default function EditEntry(props) {
   const handleImageListChange = (filesList) => {
     console.log('handleImageListChange: ', filesList);
     setCurrentImages(filesList);
+    setHasChanged(true);
+  };
+  const handleDeleteImageListChange = (deleteFilesList) => {
+    console.log('handleDeleteImageListChange: ', deleteFilesList);
+    setCurrentImagesToDelete(deleteFilesList);
     setHasChanged(true);
   };
 
@@ -123,7 +129,8 @@ export default function EditEntry(props) {
             props,
             sportType,
             notableAchievements,
-            currentImages
+            currentImages,
+            currentImagesToDelete
           );
           break;
         case 'Professional Team':
@@ -131,7 +138,8 @@ export default function EditEntry(props) {
             event,
             props,
             sportType,
-            currentImages
+            currentImages,
+            currentImagesToDelete
           );
           break;
         case 'School':
@@ -141,11 +149,17 @@ export default function EditEntry(props) {
             sportType,
             wins,
             currentImages,
+            currentImagesToDelete,
             newName
           );
           break;
         case 'Venue':
-          awaitEvent = await updateVenueMutation(event, props, currentImages);
+          awaitEvent = await updateVenueMutation(
+            event,
+            props,
+            currentImages,
+            currentImagesToDelete
+          );
           break;
         default:
           break;
@@ -522,6 +536,7 @@ export default function EditEntry(props) {
                 <FileBrowser
                   heading='Upload Images for Gallery'
                   onFilesListChange={handleImageListChange}
+                  onDeleteFilesListChange={handleDeleteImageListChange}
                   viewIds={props.entry.images || []}
                 />
               </div>

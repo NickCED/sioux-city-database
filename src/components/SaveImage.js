@@ -156,13 +156,22 @@ export async function deleteImages(imageIds, location = 'Images') {
     const imageOperations = [];
 
     for (const imageID of imageIds) {
-      const key = `${location}/${imageID}`;
-      const imageData = await API.graphql({
-        query: getImage,
-        variables: {
-          imageID: imageID,
-        },
-      });
+      console.log('imageID : ', imageID);
+      if (!imageID.useAWS) continue;
+      const key = `${location}/${imageID.imageID || imageID}`;
+      let imageData;
+      try {
+        imageData = await API.graphql({
+          query: getImage,
+          variables: {
+            imageID: imageID.imageID || imageID,
+          },
+        });
+      } catch (err) {
+        console.log('error getting image data before delete: ', err);
+        throw err;
+      }
+
       const thumbnailKey = `${location}/${imageData.data.getImage.thumbnailID}`;
 
       imageOperations.push(
@@ -186,7 +195,7 @@ export async function deleteImages(imageIds, location = 'Images') {
         query: deleteImage,
         variables: {
           input: {
-            imageID: imageID,
+            imageID: imageID.imageID || imageID,
           },
         },
       }).catch((err) => {

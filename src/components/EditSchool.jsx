@@ -18,14 +18,40 @@ import updateSchoolMutation from './updateSchoolMutation';
 
 export default function EditSchool(props) {
   const [currentLogo, setCurrentLogo] = useState();
+  const [currentImagesToDelete, setCurrentImagesToDelete] = useState([]);
   const handleLogoListChange = (filesList) => {
+    console.log(filesList.length);
+    if (filesList.length < 1) {
+      setCurrentLogo('');
+
+      setHasChanged(true);
+      return;
+    }
     setCurrentLogo(filesList[0] || null);
+    console.log('filesList', filesList);
     setHasChanged(true);
   };
+  const handleLogoListDelete = (filesList) => {
+    console.log(filesList.length);
+    if (filesList.length < 1) {
+      setCurrentImagesToDelete([]);
+      setHasChanged(true);
+      return;
+    }
+    setCurrentImagesToDelete(filesList);
+    console.log('filesList', filesList);
+    setHasChanged(true);
+  };
+
   const handleSubmit = async (e, props) => {
     let awaitEvent;
     try {
-      awaitEvent = await updateSchoolMutation(e, props, currentLogo);
+      awaitEvent = await updateSchoolMutation(
+        e,
+        props,
+        currentLogo,
+        currentImagesToDelete
+      );
       const addViewContainer = document.querySelector('.edit-school');
       addViewContainer.classList.add('edit-school-reverse');
 
@@ -84,6 +110,28 @@ export default function EditSchool(props) {
       event.target.value === props.school.yearEnd && setHasChanged(false);
 
       setYearEnd(event.target.value);
+    }
+  };
+
+  const handleLocationInputChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'location') {
+      event.target.value !== props.school.location && setHasChanged(true);
+      event.target.value === props.school.location && setHasChanged(false);
+    }
+  };
+  const handleDescriptionChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'description') {
+      event.target.value !== props.school.description && setHasChanged(true);
+      event.target.value === props.school.description && setHasChanged(false);
+    }
+  };
+  const handleNotesChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'notes') {
+      event.target.value !== props.school.notes && setHasChanged(true);
+      event.target.value === props.school.notes && setHasChanged(false);
     }
   };
 
@@ -162,6 +210,7 @@ export default function EditSchool(props) {
             <FileBrowser
               singleFile={true}
               onFilesListChange={handleLogoListChange}
+              onDeletedFilesListChange={handleLogoListDelete}
               heading='Add A Logo Image'
               viewIds={[props.school.logoUrl] || []}
               placeholder='Enter a title to use for the image'
@@ -172,17 +221,26 @@ export default function EditSchool(props) {
             <TextField
               name='location'
               placeholder='Enter the location of the school'
+              defaultValue={props.school.location}
+              onChange={handleLocationInputChange}
             />
             <Heading level={6} marginTop={'1em'}>
               Description
             </Heading>
-            <TextAreaField name='description' placeholder='Description' />
+            <TextAreaField
+              name='description'
+              placeholder='Description'
+              onChange={handleDescriptionChange}
+              defaultValue={props.school.description}
+            />
             <Heading level={6} marginTop={'1em'}>
               Additional Notes
             </Heading>
             <TextAreaField
               name='notes'
               placeholder='Additional notes will not be used for display purposes, only internal use'
+              onChange={handleNotesChange}
+              defaultValue={props.school.notes}
             />
 
             <Divider

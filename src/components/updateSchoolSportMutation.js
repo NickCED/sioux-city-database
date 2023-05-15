@@ -1,14 +1,16 @@
 import { API } from 'aws-amplify';
 import { updateSchoolSport } from '../graphql/mutations';
 
-import { saveImages } from './SaveImage';
+import { saveImages, deleteImages } from './SaveImage';
+import { upload } from '@testing-library/user-event/dist/upload';
 
 const updateSchoolSportMutation = async (
   e,
   props,
   sportType,
   wins,
-  currentImages
+  currentImages,
+  currentImagesToDelete
 ) => {
   const name =
     e.target.name.value ||
@@ -18,18 +20,31 @@ const updateSchoolSportMutation = async (
 
   try {
     let uploadingImages;
-    try {
-      uploadingImages = await saveImages(
-        currentImages,
-        'Images',
-        props.currentUser
-      );
-    } catch (error) {
-      console.log('Error uploading images:', error);
-      window.alert(
-        'There was an error uploading these images, please try deleting and reuploading.'
-      );
-      throw error; // Throw the error to stop further execution
+    if (currentImages.length > 0) {
+      try {
+        uploadingImages = await saveImages(
+          currentImages,
+          'Images',
+          props.currentUser
+        );
+      } catch (error) {
+        console.log('Error uploading images:', error);
+        window.alert(
+          'There was an error uploading these images, please try deleting and reuploading.'
+        );
+        throw error; // Throw the error to stop further execution
+      }
+    }
+    if (currentImagesToDelete.length > 0) {
+      try {
+        await deleteImages(currentImagesToDelete);
+      } catch (error) {
+        console.log('Error deleting images:', error);
+        window.alert(
+          'There was an error deleting these images, please try again.'
+        );
+        throw error; // Throw the error to stop further execution
+      }
     }
 
     const response = await API.graphql({

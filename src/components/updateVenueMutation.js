@@ -1,11 +1,34 @@
 import { API } from 'aws-amplify';
 import { updateVenue } from '../graphql/mutations';
-import { saveImages } from './SaveImage';
+import { saveImages, deleteImages } from './SaveImage';
 
-const updateVenueMutation = async (e, props, currentImages) => {
+const updateVenueMutation = async (
+  e,
+  props,
+  currentImages,
+  currentImagesToDelete
+) => {
   console.log(e.target.location);
   try {
-    const uploadingImages = await saveImages(currentImages);
+    let uploadingImages;
+    try {
+      uploadingImages = await saveImages(currentImages);
+    } catch (error) {
+      console.log('Error uploading images:', error);
+      window.alert(
+        'There was an error uploading these images, please try deleting and reuploading.'
+      );
+      throw error; // Throw the error to stop further execution
+    }
+    try {
+      await deleteImages(currentImagesToDelete);
+    } catch (error) {
+      console.log('Error deleting images:', error);
+      window.alert(
+        'There was an error deleting these images, please try again.'
+      );
+      throw error; // Throw the error to stop further execution
+    }
     await API.graphql({
       query: updateVenue,
       variables: {

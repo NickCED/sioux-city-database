@@ -1,12 +1,13 @@
 import { API } from 'aws-amplify';
 import { updateProfessionalTeam } from '../graphql/mutations';
-import { saveImages } from './SaveImage';
+import { saveImages, deleteImages } from './SaveImage';
 
 const updateProfessionalTeamMutation = async (
   e,
   props,
   sportType,
-  currentImages
+  currentImages,
+  currentImagesToDelete
 ) => {
   let uploadingImages;
   try {
@@ -14,6 +15,15 @@ const updateProfessionalTeamMutation = async (
       uploadingImages = await saveImages(currentImages);
     } catch (error) {
       console.log('Error uploading images:', error);
+      throw error; // Throw the error to stop further execution
+    }
+    try {
+      await deleteImages(currentImagesToDelete);
+    } catch (error) {
+      console.log('Error deleting images:', error);
+      window.alert(
+        'There was an error deleting these images, please try again.'
+      );
       throw error; // Throw the error to stop further execution
     }
 
