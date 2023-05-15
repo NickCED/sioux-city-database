@@ -42,12 +42,17 @@ export default function Win(props) {
   const addWin = () => {
     const newWin = inputRef.current.value;
     const newYear = yearRef.current.value;
+
     if (newWin === '') return;
 
     if (newWin) {
       const updatedWinList = [
         ...added,
-        { id: uuidv4(), text: newWin, year: newYear },
+        {
+          id: uuidv4(),
+          text: newWin,
+          year: newYear,
+        },
       ];
       setAdded(updatedWinList);
       props.onWinListChange(updatedWinList);
@@ -247,11 +252,13 @@ export default function Win(props) {
                 placeholder='Type description here...'
                 value={win.description}
                 onChange={(e) => {
+                  console.log('e.target.value', e.target.value);
                   const updatedWins = added.map((w) =>
                     w.id === win.id ? { ...w, description: e.target.value } : w
                   );
+                  console.log('updatedwins', updatedWins);
                   setAdded(updatedWins);
-                  props.onDescriptionChange();
+                  props.onWinListChange(updatedWins);
                 }}
               />
               <Button

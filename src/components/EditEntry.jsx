@@ -67,7 +67,8 @@ export default function EditEntry(props) {
   const handleCloseEntry = (e) => {
     if (
       e.target.classList.contains('add-edit') ||
-      e.target.classList.contains('close-icon')
+      e.target.classList.contains('close-icon') ||
+      e.target.classList.contains('click-cancel')
     ) {
       const addViewContainer = document.querySelector('.add-edit');
       addViewContainer.classList.add('add-edit-reverse');
@@ -531,12 +532,7 @@ export default function EditEntry(props) {
               }}
             ></Divider>
             <Flex justifyContent={'space-between'}>
-              <Button
-                onClick={(e) => {
-                  handleFormCancel(e);
-                  props.onFormCancel();
-                }}
-              >
+              <Button className='click-cancel' onClick={handleCloseEntry}>
                 Cancel
               </Button>
               <Button isDisabled={!hasChanged} type='submit'>
