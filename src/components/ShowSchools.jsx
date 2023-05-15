@@ -1,9 +1,16 @@
-import { Button, Divider, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import {
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Text,
+  SwitchField,
+} from '@aws-amplify/ui-react';
 import missingImage from '../images/ImagePlaceHolder.png';
 import './ShowSchools.css';
 import { IoAddOutline, IoPencilOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
-
+import { handleKioskReady } from './AllEntries/handleKioskReady';
 export default function ShowSchools(props) {
   const [sortedSchools, setSortedSchools] = useState([
     ...props.highSchoolData,
@@ -13,6 +20,10 @@ export default function ShowSchools(props) {
   const handleAddSchool = async () => {
     console.log('add school');
     console.log('props.data', props.data);
+  };
+  const handleEditSchool = (school) => {
+    console.log('edit school', school);
+    props.onEditSchool(school);
   };
 
   return (
@@ -75,14 +86,28 @@ export default function ShowSchools(props) {
               alignItems={'center'}
               gap={{ base: '.25em', md: '1em' }}
             >
-              <Button border={'none'} height={'80%'}>
+              <SwitchField
+                label='Kiosk Ready'
+                isDisabled={false}
+                defaultChecked={school.kioskReady}
+                isLabelHidden={true}
+                school={school}
+                onChange={(e) => {
+                  console.log('eschool', school);
+                  handleKioskReady(e, school, true, false);
+                }}
+                style={{
+                  cursor: 'pointer',
+                }}
+              />
+              <Button
+                onClick={() => handleEditSchool(school)}
+                border={'none'}
+                height={'80%'}
+                marginRight={'.25em'}
+              >
                 <IoPencilOutline size={'1.5rem'} />
               </Button>
-              <img
-                className='schools-list-logo'
-                src={school.logo ? school.logo : missingImage}
-                alt='logo'
-              />
             </Flex>
           </Flex>
         ))}

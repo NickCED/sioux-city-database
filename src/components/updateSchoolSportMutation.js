@@ -17,9 +17,22 @@ const updateSchoolSportMutation = async (
     }`;
 
   try {
-    const uploadingImages = await saveImages(currentImages);
+    let uploadingImages;
+    try {
+      uploadingImages = await saveImages(
+        currentImages,
+        'Images',
+        props.currentUser
+      );
+    } catch (error) {
+      console.log('Error uploading images:', error);
+      window.alert(
+        'There was an error uploading these images, please try deleting and reuploading.'
+      );
+      throw error; // Throw the error to stop further execution
+    }
 
-    await API.graphql({
+    const response = await API.graphql({
       query: updateSchoolSport,
       variables: {
         input: {
@@ -38,9 +51,11 @@ const updateSchoolSportMutation = async (
         },
       },
     });
+    return response.data;
   } catch (err) {
     console.log('error creating School Sport: ', err);
     window.alert('Error creating School Sport. Please try again.');
+    return Promise.reject(err);
   }
 };
 

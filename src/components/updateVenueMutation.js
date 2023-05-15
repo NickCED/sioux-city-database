@@ -26,12 +26,16 @@ const updateVenueMutation = async (e, props, currentImages) => {
     })
       .then((data) => {
         console.log('data from Venue: ', data);
+        return true;
       })
       .catch((err) => {
         console.log('error creating Venue 2: ', err);
+        return false;
       });
   } catch (err) {
     console.log('error creating Venue 1: ', err);
+    window.alert('Error creating Venue. Please try again.');
+    return false;
   }
 };
 

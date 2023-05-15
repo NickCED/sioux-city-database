@@ -8,10 +8,16 @@ const updateProfessionalTeamMutation = async (
   sportType,
   currentImages
 ) => {
+  let uploadingImages;
   try {
-    const uploadingImages = await saveImages(currentImages);
+    try {
+      uploadingImages = await saveImages(currentImages);
+    } catch (error) {
+      console.log('Error uploading images:', error);
+      throw error; // Throw the error to stop further execution
+    }
 
-    await API.graphql({
+    const response = await API.graphql({
       query: updateProfessionalTeam,
       variables: {
         input: {
@@ -28,9 +34,11 @@ const updateProfessionalTeamMutation = async (
         },
       },
     });
+    return response.data;
   } catch (err) {
     console.log('error creating Hall of Fame 1: ', err);
     window.alert('Error creating Professional Team. Please try again.');
+    return Promise.reject(err);
   }
 };
 

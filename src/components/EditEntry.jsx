@@ -108,41 +108,47 @@ export default function EditEntry(props) {
   };
 
   const handleSubmit = async (event, props) => {
-    console.log('submit clicked', props.entry);
-    console.log('name', event.target.name.value);
-    switch (props.entry.entryType) {
-      case 'Hall of Fame':
-        updateHallOfFameMutation(
-          event,
-          props,
-          sportType,
-          notableAchievements,
-          currentImages
-        );
-        break;
-      case 'Professional Team':
-        await updateProfessionalTeamMutation(
-          event,
-          props,
-          sportType,
-          currentImages
-        );
-        break;
-      case 'School':
-        await updateSchoolSportMutation(
-          event,
-          props,
-          sportType,
-          wins,
-          currentImages,
-          newName
-        );
-        break;
-      case 'Venue':
-        await updateVenueMutation(event, props, currentImages);
-        break;
-      default:
-        break;
+    let awaitEvent;
+    console.log('handleSubmit: ', props);
+    try {
+      switch (props.entry.entryType) {
+        case 'Hall of Fame':
+          console.log('Hall of Fame: ', props);
+          awaitEvent = await updateHallOfFameMutation(
+            event,
+            props,
+            sportType,
+            notableAchievements,
+            currentImages
+          );
+          break;
+        case 'Professional Team':
+          awaitEvent = await updateProfessionalTeamMutation(
+            event,
+            props,
+            sportType,
+            currentImages
+          );
+          break;
+        case 'School':
+          awaitEvent = await updateSchoolSportMutation(
+            event,
+            props,
+            sportType,
+            wins,
+            currentImages,
+            newName
+          );
+          break;
+        case 'Venue':
+          awaitEvent = await updateVenueMutation(event, props, currentImages);
+          break;
+        default:
+          break;
+      }
+      props.onFormSubmit();
+    } catch (error) {
+      window.alert("error: couldn't submit");
     }
   };
 
@@ -273,7 +279,6 @@ export default function EditEntry(props) {
             onSubmit={(e) => {
               e.preventDefault();
               handleSubmit(e, props);
-              props.onFormSubmit();
             }}
           >
             <Heading level={6} marginTop={'1em'}>
@@ -430,7 +435,7 @@ export default function EditEntry(props) {
                       </Heading>
                       <YearSelector
                         selectName='endYear'
-                        min={yearStart || props.entry.yearStart || 1800}
+                        min={yearStart || props.entry.startYear || 1800}
                         max={currentYear}
                         initYear={props.entry.endYear || ''}
                         active={props.entry.endYear ? true : false}

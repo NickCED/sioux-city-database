@@ -25,6 +25,7 @@ export default function FileBrowser({
   const [buttonText, setButtonText] = useState('Upload Image');
 
   useEffect(() => {
+    console.log('props.viewIds', props.viewIds);
     if (props.viewIds) {
       if (props.viewIds.length === 0) return;
       async function getImagesFromS3() {
@@ -37,8 +38,10 @@ export default function FileBrowser({
     }
   }, []);
 
-  const handleDelete = (id) => {
-    const updatedFilesList = filesList.filter((file) => file.id !== id);
+  const handleDelete = (imageID) => {
+    const updatedFilesList = filesList.filter(
+      (file) => file.imageID !== imageID
+    );
     setFilesList(updatedFilesList);
     if (updatedFilesList.length === 0 && singleFile) {
       setButtonText('Upload Image');
@@ -46,12 +49,12 @@ export default function FileBrowser({
     props.onFilesListChange(updatedFilesList);
   };
 
-  const handleEdit = (id) => {
-    const fileToEdit = filesList.find((file) => file.id === id);
+  const handleEdit = (imageID) => {
+    const fileToEdit = filesList.find((file) => file.imageID === imageID);
     const newTitle = prompt('Enter a new title for the image', fileToEdit.name);
     if (newTitle) {
       const updatedFilesList = filesList.map((file) =>
-        file.id === id ? { ...file, name: newTitle } : file
+        file.imageID === imageID ? { ...file, name: newTitle } : file
       );
       setFilesList(updatedFilesList);
       props.onFilesListChange(updatedFilesList);
@@ -80,7 +83,7 @@ export default function FileBrowser({
         const updatedFilesList = [
           ...filesList,
           {
-            id: fileID,
+            imageID: fileID,
             name: imageTitle, // Update the name property with the user's input.
             type: file.type,
             originalSize: file.size,
@@ -232,7 +235,7 @@ export default function FileBrowser({
               opacity: draggingIndex === index ? 0.5 : 1,
               cursor: 'grab',
             }}
-            key={file.id}
+            key={file.imageID}
             draggable
             onDragStart={(e) => handleDragStart(e, index)}
             onDragEnter={(e) => handleDragEnter(e, index)}
@@ -281,12 +284,12 @@ export default function FileBrowser({
                 <Flex>
                   <IoPencilOutline
                     cursor={'pointer'}
-                    onClick={() => handleEdit(file.id)}
+                    onClick={() => handleEdit(file.imageID)}
                     size={'1.25rem'}
                   />
                   <IoCloseOutline
                     cursor={'pointer'}
-                    onClick={() => handleDelete(file.id)}
+                    onClick={() => handleDelete(file.imageID)}
                     size={'1.5rem'}
                   />
                 </Flex>

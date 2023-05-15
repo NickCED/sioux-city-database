@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import FileBrowser from './FileBrowser';
 import {
   Flex,
@@ -11,17 +12,64 @@ import {
 } from '@aws-amplify/ui-react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { YearSelector } from './YearSelector';
+import './EditSchool.css';
+import missingImage from '../images/ImagePlaceHolder.png';
 
 export default function EditSchool(props) {
-  const handleCloseEditSchool = () => {};
-  const handleLogoListChange = (filesList) => {};
+  const [currentLogo, setCurrentLogo] = useState();
+  const handleLogoListChange = (filesList) => {
+    setCurrentLogo(filesList[0] || null);
+    setHasChanged(true);
+  };
   const handleSubmit = (e, props) => {};
   const handleFormCancel = (e) => {};
-  const handleImageListChange = (filesList) => {};
-  const onYearStartChange = (e) => {};
+
   const currentYear = new Date().getFullYear();
-  const [yearStart, setYearStart] = React.useState();
+  const [hasChanged, setHasChanged] = React.useState(false);
   const [showSubmit, setShowSubmit] = React.useState(false);
+  const handleCloseEditSchool = (e) => {
+    if (
+      e.target.classList.contains('edit-school') ||
+      e.target.classList.contains('close-icon')
+    ) {
+      const addViewContainer = document.querySelector('.edit-school');
+      addViewContainer.classList.add('edit-school-reverse');
+
+      addViewContainer.addEventListener('animationend', () => {
+        props.onCloseEditSchool();
+      });
+    }
+  };
+  const [yearStart, setYearStart] = useState(() => {
+    if (props.school.startYear) {
+      return props.school.startYear;
+    }
+    return '';
+  });
+  const onYearStartChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'startYear') {
+      setYearStart(event.target.value);
+      event.target.value !== props.school.yearStart && setHasChanged(true);
+      event.target.value === props.school.yearStart && setHasChanged(false);
+    }
+  };
+  //YEAR END ==================================================================
+  const [yearEnd, setYearEnd] = useState(() => {
+    if (props.school.yearEnd) {
+      return props.school.yearEnd;
+    }
+    return '';
+  });
+  const onYearEndChange = (event) => {
+    event.preventDefault();
+    if (event.target.name === 'endYear') {
+      event.target.value !== props.school.yearEnd && setHasChanged(true);
+      event.target.value === props.school.yearEnd && setHasChanged(false);
+
+      setYearEnd(event.target.value);
+    }
+  };
 
   return (
     <Flex className='edit-school'>
@@ -41,8 +89,9 @@ export default function EditSchool(props) {
           >
             <IoCloseOutline size={'1.5rem'} pointerEvents={'none'} />
           </Button>
-          <Heading level={5} style={{ marginBottom: '1rem' }}>
-            Edit School
+
+          <Heading level={5} style={{ textAlign: 'center' }}>
+            Edit {props.school.name}
           </Heading>
           <form
             onKeyDown={(e) => {
@@ -55,16 +104,6 @@ export default function EditSchool(props) {
               handleSubmit(e, props);
             }}
           >
-            <Heading level={6} marginTop={'1em'}>
-              Name
-            </Heading>
-            <Text>
-              {
-                props.schoolData.find((school) => {
-                  return school.id === props.school.id;
-                }).name
-              }
-            </Text>
             <Flex>
               <Flex
                 direction={'column'}
@@ -80,6 +119,7 @@ export default function EditSchool(props) {
                   onChange={onYearStartChange}
                   min={1800}
                   max={currentYear}
+                  initYear={props.school.startYear || ''}
                 />
               </Flex>
               <Flex
@@ -93,9 +133,12 @@ export default function EditSchool(props) {
                 </Heading>
                 <YearSelector
                   selectName='endYear'
-                  min={yearStart}
+                  min={yearStart || props.school.startYear || 1800}
                   max={currentYear}
-                  active={true}
+                  active={props.school.endYear ? true : false}
+                  showChange={true}
+                  initYear={props.school.endYear || ''}
+                  onChange={onYearEndChange}
                 />
               </Flex>
             </Flex>
@@ -110,17 +153,20 @@ export default function EditSchool(props) {
             </Heading>
             <TextField
               name='location'
-              placeholder='Enter the location of the venue'
+              placeholder='Enter the location of the school'
             />
             <Heading level={6} marginTop={'1em'}>
               Description
             </Heading>
             <TextAreaField name='description' placeholder='Description' />
-
-            <FileBrowser
-              heading='Upload Images for Gallery'
-              onFilesListChange={handleImageListChange}
+            <Heading level={6} marginTop={'1em'}>
+              Additional Notes
+            </Heading>
+            <TextAreaField
+              name='notes'
+              placeholder='Additional notes will not be used for display purposes, only internal use'
             />
+
             <Divider
               style={{
                 margin: '1rem 0',
@@ -135,7 +181,7 @@ export default function EditSchool(props) {
               >
                 Cancel
               </Button>
-              <Button isDisabled={!showSubmit} type='submit'>
+              <Button isDisabled={!hasChanged} type='submit'>
                 Submit
               </Button>
             </Flex>

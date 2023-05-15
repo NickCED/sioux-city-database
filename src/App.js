@@ -102,8 +102,12 @@ function App({ signOut }) {
 
   const handleEditSchool = (school) => {
     setEditSchoolData(school);
+    setShowEditSchool(true);
   };
-  const handleSchoolCancel = () => {};
+  const handleSchoolCancel = () => {
+    setShowEditSchool(false);
+    setEditSchoolData();
+  };
   const handleSchoolSubmit = () => {};
 
   // ================================================================================================================
@@ -121,10 +125,6 @@ function App({ signOut }) {
         });
 
         setSportsData(professionalSportsData.data.listProfessionalSports.items);
-        console.log(
-          'professionalSportsData: ',
-          professionalSportsData.data.listProfessionalSports.items
-        );
       };
 
       fetchProfessionalSports();
@@ -147,11 +147,8 @@ function App({ signOut }) {
 
       setProfessionalData(sortedProfessionals);
       setClubData(sortedClubs);
-      console.log('sportsData: ', sportsData);
-      console.log('professionalData: ', professionalData);
-      console.log('clubData: ', clubData);
     }
-  }, []);
+  }, [sportsData]);
 
   // ================================================================================================================
 
@@ -260,7 +257,7 @@ function App({ signOut }) {
             onFormSubmit={handleSchoolSubmit}
             onFormCancel={handleSchoolCancel}
             currentUser={currentUserName}
-            onCloseEntry={handleSchoolCancel}
+            onCloseEditSchool={handleSchoolCancel}
             highSchoolData={highSchoolData}
             collegeData={collegeData}
             school={editSchoolData}

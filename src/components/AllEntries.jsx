@@ -211,10 +211,10 @@ export default function AllEntries(props) {
             title='Entries'
             onClick={() => handleTabChange('Entries')}
           ></TabItem>
-          {/* <TabItem
+          <TabItem
             title='Schools'
             onClick={() => handleTabChange('Schools')}
-          ></TabItem> */}
+          ></TabItem>
           {/* <TabItem
             title='Professional Sports'
             onClick={() => handleTabChange('Professional Sports')}
@@ -365,6 +365,8 @@ export default function AllEntries(props) {
         >
           <ShowSchools
             schoolData={props.schoolData}
+            highSchoolData={props.highSchoolData}
+            collegeData={props.collegeData}
             onEditSchool={(school) => props.onEditSchool(school)}
           />
         </div>

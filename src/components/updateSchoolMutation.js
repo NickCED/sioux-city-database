@@ -1,8 +1,8 @@
 import { API } from 'aws-amplify';
-import { updateHallOfFame } from '../graphql/mutations';
+import { updateSchool } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
 
-const updateHallOfFameMutation = async (
+const updateSchoolMutation = async (
   e,
   props,
   sportType,
@@ -24,32 +24,29 @@ const updateHallOfFameMutation = async (
       );
       throw error; // Throw the error to stop further execution
     }
-
     const response = await API.graphql({
-      query: updateHallOfFame,
+      query: updateSchool,
       variables: {
         input: {
           id: props.entry.id,
           name: e.target.name.value || props.entry.name,
-
-          inductionYear:
-            e.target.inductionYear.value || props.entry.inductionYear || null,
+          startYear: e.target.startYear.value || props.entry.startYear || null,
+          endYear: e.target.endYear.value || props.entry.endYear || null,
           sport: sportType || props.entry.sport || '',
           description: e.target.description.value || '',
-          notableAchievements: notableAchievements,
+
           notes: e.target.notes.value || '',
-          images: uploadingImages,
+          images: uploadingImages || [],
           createdBy: props.currentUser || 'unknown user',
         },
       },
     });
-
     return response.data;
   } catch (err) {
-    console.log('error creating Hall of Fame 1: ', err);
-    window.alert('Error creating Hall of Fame. Please try again.');
+    console.log('error updating School: ', err);
+    window.alert('Error Updating School. Please try again.');
     return Promise.reject(err);
   }
 };
 
-export default updateHallOfFameMutation;
+export default updateSchoolMutation;

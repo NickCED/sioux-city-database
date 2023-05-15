@@ -1,4 +1,25 @@
 {
+  "testing": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-siouxcityupload-testing-225141-authRole",
+      "UnauthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-siouxcityupload-testing-225141-deployment",
+      "UnauthRoleName": "amplify-siouxcityupload-testing-225141-unauthRole",
+      "StackName": "amplify-siouxcityupload-testing-225141",
+      "StackId": "arn:aws:cloudformation:us-east-2:552976204294:stack/amplify-siouxcityupload-testing-225141/67106470-eb97-11ed-873f-029cc0df17c8",
+      "AmplifyAppId": "d1enb2fhs7o8vx"
+    },
+    "categories": {
+      "auth": {
+        "siouxcityupload9519fe5d": {}
+      },
+      "storage": {
+        "s3siouxcityuploadstorageced": {}
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-amplify8745e04749d24-staging-185033-authRole",
@@ -20,27 +41,6 @@
       },
       "api": {
         "siouxcitydata": {}
-      }
-    }
-  },
-  "testing": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-siouxcityupload-testing-225141-authRole",
-      "UnauthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::552976204294:role/amplify-siouxcityupload-testing-225141-authRole",
-      "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-siouxcityupload-testing-225141-deployment",
-      "UnauthRoleName": "amplify-siouxcityupload-testing-225141-unauthRole",
-      "StackName": "amplify-siouxcityupload-testing-225141",
-      "StackId": "arn:aws:cloudformation:us-east-2:552976204294:stack/amplify-siouxcityupload-testing-225141/67106470-eb97-11ed-873f-029cc0df17c8",
-      "AmplifyAppId": "d1enb2fhs7o8vx"
-    },
-    "categories": {
-      "auth": {
-        "siouxcityupload9519fe5d": {}
-      },
-      "storage": {
-        "s3siouxcityuploadstorageced": {}
       }
     }
   },

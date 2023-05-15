@@ -9,14 +9,13 @@ const createHallOfFameMutation = async (
   notableAchievements,
   currentImages
 ) => {
-  console.log('notableAchievements: ', notableAchievements);
+  let uploadingImages;
   try {
-    const uploadingImages = await saveImages(
+    uploadingImages = await saveImages(
       currentImages,
       'Images',
       props.currentUser
     );
-    return uploadingImages; //
   } catch (err) {
     console.log('error uploading these images : ', err);
     window.alert(
@@ -26,11 +25,6 @@ const createHallOfFameMutation = async (
   }
 
   try {
-    const uploadingImages = await saveImages(
-      currentImages,
-      'Images',
-      props.currentUser
-    );
     await API.graphql({
       query: createHallOfFame,
       variables: {

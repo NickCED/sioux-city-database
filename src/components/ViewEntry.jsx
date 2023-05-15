@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Card,
-  Heading,
   Text,
   Flex,
   Button,
@@ -9,13 +7,9 @@ import {
   ExpanderItem,
 } from '@aws-amplify/ui-react';
 import './ViewEntry.css';
-import {
-  IoChevronDownOutline,
-  IoCloseOutline,
-  IoSearch,
-} from 'react-icons/io5';
+import { IoCloseOutline } from 'react-icons/io5';
 import { getImages } from './SaveImage';
-import ImageGallery from './ImageGallery';
+
 import ViewImages from './ViewImages';
 
 export default function ViewEntry(props) {
