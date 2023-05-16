@@ -162,6 +162,7 @@ export default function FileBrowser({
     setDraggingIndex(null);
 
     setFilesList(newFilesList);
+    props.onFilesListChange(newFilesList);
   }
   function handleDragEnd(e) {
     setDraggingIndex(null);

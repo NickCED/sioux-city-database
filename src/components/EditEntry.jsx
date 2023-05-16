@@ -45,7 +45,12 @@ export default function EditEntry(props) {
     }
     return '';
   });
-  const [notableAchievements, setNotableAchievements] = useState([]);
+  const [notableAchievements, setNotableAchievements] = useState(() => {
+    if (props.entry.notableAchievements) {
+      return props.entry.notableAchievements;
+    }
+    return [];
+  });
   const [sportType, setSportType] = useState(() => {
     if (props.entry.sport) {
       return props.entry.sport;
@@ -53,9 +58,19 @@ export default function EditEntry(props) {
     return '';
   });
 
-  const [currentImages, setCurrentImages] = useState([]);
+  const [currentImages, setCurrentImages] = useState(() => {
+    if (props.entry.images) {
+      return props.entry.images;
+    }
+    return [];
+  });
   const [currentImagesToDelete, setCurrentImagesToDelete] = useState([]);
-  const [wins, setWins] = useState([]);
+  const [wins, setWins] = useState(() => {
+    if (props.entry.wins) {
+      return props.entry.wins;
+    }
+    return [];
+  });
   const [showSubmit, setShowSubmit] = useState(false);
   const [expandedEntryType, setExpandedEntryType] = useState(true);
   const [description, setDescription] = useState(() => {
@@ -486,7 +501,7 @@ export default function EditEntry(props) {
                   <Flex direction={'column'} gap={'0'}>
                     <NoteAchievement
                       onAchievementListChange={handleAchievementListChange}
-                      achievementList={props.entry.notableAchievements || []}
+                      achievementList={notableAchievements || []}
                       onReorder={handleReorder}
                     />
                   </Flex>

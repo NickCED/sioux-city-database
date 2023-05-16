@@ -1,6 +1,6 @@
 import { Text, Heading, TextField, Button, Flex } from '@aws-amplify/ui-react';
 import { IoAddOutline, IoCloseOutline, IoPencilOutline } from 'react-icons/io5';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import './NoteAchievement.css';
@@ -20,6 +20,9 @@ export default function NoteAchievement(props) {
     }
     return [];
   });
+  useEffect(() => {
+    console.log('added', added);
+  }, [added]);
 
   const inputRef = useRef();
   const yearRef = useRef(); // Added yearRef for the YearSelector
