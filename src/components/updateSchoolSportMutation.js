@@ -14,6 +14,7 @@ const updateSchoolSportMutation = async (
 ) => {
   const name =
     e.target.name.value ||
+    props.entry.name ||
     `${sportType} : ${
       e.target.school.options[e.target.school.selectedIndex].textContent
     }`;
