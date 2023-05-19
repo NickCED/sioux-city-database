@@ -2,7 +2,6 @@ import { API } from 'aws-amplify';
 import { updateSchoolSport } from '../graphql/mutations';
 
 import { saveImages, deleteImages } from './SaveImage';
-import { upload } from '@testing-library/user-event/dist/upload';
 
 const updateSchoolSportMutation = async (
   e,
@@ -10,15 +9,9 @@ const updateSchoolSportMutation = async (
   sportType,
   wins,
   currentImages,
-  currentImagesToDelete
+  currentImagesToDelete,
+  newName
 ) => {
-  const name =
-    e.target.name.value ||
-    props.entry.name ||
-    `${sportType} : ${
-      e.target.school.options[e.target.school.selectedIndex].textContent
-    }`;
-
   try {
     let uploadingImages;
     if (currentImages.length > 0) {
@@ -52,7 +45,7 @@ const updateSchoolSportMutation = async (
       query: updateSchoolSport,
       variables: {
         input: {
-          name: name,
+          name: newName,
           entryType: props.entry.entryType,
           startYear: e.target.startYear.value || props.entry.startYear || null,
           endYear: e.target.endYear.value || props.entry.endYear || null,

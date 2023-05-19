@@ -1,14 +1,16 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listSports } from '../graphql/queries';
 import { SelectField, TextField } from '@aws-amplify/ui-react';
 import { uniqueStringArrayMerge } from './uniqueStringArrayMerge.ts';
 
 function SportSelection(props) {
-  const [addSport, setAddSport] = React.useState(false);
-  const [sports, setSports] = React.useState([]);
-  const [selectedSport, setSelectedSport] = React.useState('');
+  // State variables
+  const [addSport, setAddSport] = useState(false);
+  const [sports, setSports] = useState([]);
+  const [selectedSport, setSelectedSport] = useState(props.initSport || '');
 
+  // Predefined sports
   const genericSports = [
     'Archery',
     'Automobile Racing',
@@ -44,6 +46,8 @@ function SportSelection(props) {
     'Wrestling',
     'Volleyball',
   ];
+
+  // Fetch user inputed additional sports from database
   const fetchSports = async () => {
     try {
       const result = await API.graphql(graphqlOperation(listSports));
@@ -54,24 +58,28 @@ function SportSelection(props) {
         genericSports,
         databaseSports
       );
-      setSports(sportsOptions);
+      const sortedSports = sportsOptions.sort();
+      setSports(sortedSports);
     } catch (err) {
       console.log('error fetching sports', err);
     }
   };
-
-  React.useEffect(() => {
-    if (props.initSport) {
-      props.initSport === ''
-        ? setSelectedSport('')
-        : setSelectedSport(props.initSport);
-    }
+  //fetch on mount
+  useEffect(() => {
     fetchSports();
   }, []);
 
+  // Handle user input changes
   const handleOptionChange = (e) => {
     if (e.target.name === 'selectedSport') {
-      e.target.value === 'Add a sport' ? setAddSport(true) : setAddSport(false);
+      if (e.target.value === 'Add a new sport') {
+        setAddSport(true);
+        props.onAddSport(true);
+        return;
+      } else {
+        setAddSport(false);
+        props.onAddSport(false);
+      }
     }
     setSelectedSport(e.target.value);
     props.onChange(e);
@@ -92,6 +100,7 @@ function SportSelection(props) {
               </option>
             ))
           : null}
+        <option value='Add a new sport'>Add a new sport</option>
       </SelectField>
       {addSport && (
         <TextField

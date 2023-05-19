@@ -1,5 +1,5 @@
 import { API } from 'aws-amplify';
-import { createHallOfFame } from '../graphql/mutations';
+import { createHallOfFame, createSport } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
 
 const createHallOfFameMutation = async (
@@ -7,8 +7,26 @@ const createHallOfFameMutation = async (
   props,
   sportType,
   notableAchievements,
-  currentImages
+  currentImages,
+  addNewSport
 ) => {
+  if (addNewSport) {
+    console.log('adding new sport : ', sportType);
+    try {
+      await API.graphql({
+        query: createSport,
+        variables: {
+          input: {
+            type: sportType,
+          },
+        },
+      });
+    } catch (err) {
+      console.log('error creating sport : ', err);
+      throw err;
+    }
+  }
+
   let uploadingImages;
   try {
     uploadingImages = await saveImages(
@@ -21,7 +39,7 @@ const createHallOfFameMutation = async (
     window.alert(
       'There was an error uploading these images, please try deleting and reuploading. '
     );
-    return; //this is to stop the function from continuing if there is an error
+    throw err;
   }
 
   try {
@@ -43,6 +61,7 @@ const createHallOfFameMutation = async (
     });
   } catch (err) {
     console.log('error creating Hall of Fame : ', err);
+    throw err;
   }
 };
 

@@ -5,7 +5,6 @@ import {
   Flex,
   Button,
   Heading,
-  Text,
   TextField,
   TextAreaField,
   Divider,
@@ -13,10 +12,11 @@ import {
 import { IoCloseOutline } from 'react-icons/io5';
 import { YearSelector } from './YearSelector';
 import './EditSchool.css';
-import missingImage from '../images/ImagePlaceHolder.png';
+
 import updateSchoolMutation from './updateSchoolMutation';
 
 export default function EditSchool(props) {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [currentLogo, setCurrentLogo] = useState();
   const [currentImagesToDelete, setCurrentImagesToDelete] = useState([]);
   const handleLogoListChange = (filesList) => {
@@ -44,6 +44,7 @@ export default function EditSchool(props) {
   };
 
   const handleSubmit = async (e, props) => {
+    setHasSubmitted(true);
     let awaitEvent;
     try {
       awaitEvent = await updateSchoolMutation(
@@ -61,6 +62,7 @@ export default function EditSchool(props) {
     } catch (error) {
       console.log('error', error);
       window.alert('Error updating school');
+      setHasSubmitted(false);
     }
   };
 
@@ -213,6 +215,7 @@ export default function EditSchool(props) {
               onDeletedFilesListChange={handleLogoListDelete}
               heading='Add A Logo Image'
               viewIds={[props.school.logoUrl] || []}
+              onViewIds={(file) => setCurrentLogo(file)}
               placeholder='Enter a title to use for the image'
             />
             <Heading level={6} marginTop={'1em'}>
@@ -255,7 +258,7 @@ export default function EditSchool(props) {
               >
                 Cancel
               </Button>
-              <Button isDisabled={!hasChanged} type='submit'>
+              <Button isDisabled={!hasChanged || hasSubmitted} type='submit'>
                 Submit
               </Button>
             </Flex>

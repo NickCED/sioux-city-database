@@ -3,15 +3,21 @@ import { createVenue } from '../graphql/mutations';
 import { saveImages } from './SaveImage';
 
 const createVenueMutation = async (e, props, currentImages) => {
+  let uploadingImages;
   try {
-    console.log('currentImages: ', currentImages);
-    console.log('e.target: ', e.target.location);
-
-    const uploadingImages = await saveImages(
+    uploadingImages = await saveImages(
       currentImages,
       'Images',
       props.currentUser
     );
+  } catch (err) {
+    console.log('error uploading these images : ', err);
+    window.alert(
+      'There was an error uploading these images, please try deleting and reuploading. '
+    );
+    throw err;
+  }
+  try {
     await API.graphql({
       query: createVenue,
       variables: {
@@ -27,15 +33,10 @@ const createVenueMutation = async (e, props, currentImages) => {
           createdBy: props.currentUser || 'unknown user',
         },
       },
-    })
-      .then((data) => {
-        console.log('data from Venue: ', data);
-      })
-      .catch((err) => {
-        console.log('error creating Venue 2: ', err);
-      });
+    });
   } catch (err) {
     console.log('error creating Venue 1: ', err);
+    throw err;
   }
 };
 

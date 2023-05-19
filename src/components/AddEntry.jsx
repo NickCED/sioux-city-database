@@ -32,6 +32,7 @@ import createProfessionalTeamMutation from './createProfessionalTeamMutation';
 import createVenueMutation from './createVenueMutation';
 
 export default function AddEntry(props) {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [alertName, setAlertName] = useState(false);
   const [name, setName] = useState('');
   const [entryType, setEntryType] = useState('');
@@ -44,6 +45,7 @@ export default function AddEntry(props) {
   const [currentImages, setCurrentImages] = useState([]);
   const [showSubmit, setShowSubmit] = useState(false);
   const [expandedEntryType, setExpandedEntryType] = useState(false);
+  const [addNewSport, setAddNewSport] = useState(false);
 
   //====================================================================================================
   const handleCloseEntry = (e) => {
@@ -86,6 +88,24 @@ export default function AddEntry(props) {
 
   const onSportTypeChange = (event) => {
     event.preventDefault();
+
+    if (
+      name.includes(sportType) &&
+      sportType !== event.target.value &&
+      sportType !== ''
+    ) {
+      const updatedSportName = name.replace(sportType, event.target.value);
+      setName(updatedSportName);
+    }
+    if (name === '') {
+      setName(
+        `${event.target.value} : ${
+          props.schoolData.find((school) => school.id === props.entry.school)
+            .name
+        }`
+      );
+    }
+
     if (event.target.name === 'selectedSport') {
       setSportType(event.target.value);
     } else if (event.target.name === 'addedSport') {
@@ -143,7 +163,8 @@ export default function AddEntry(props) {
     }
   };
   const handleSubmit = async (event, props) => {
-    console.log('handleSubmit: ', event.target.school);
+    setHasSubmitted(true);
+
     if (
       event.target.entryType.value === 'School' &&
       event.target.school.value === ''
@@ -152,40 +173,52 @@ export default function AddEntry(props) {
       return;
     }
 
-    switch (event.target.entryType.value) {
-      case 'Hall of Fame':
-        createHallOfFameMutation(
-          event,
-          props,
-          sportType,
-          notableAchievements,
-          currentImages
-        );
-        break;
-      case 'Professional Team':
-        await createProfessionalTeamMutation(
-          event,
-          props,
-          professionalSport,
-          currentImages
-        );
-        break;
-      case 'School':
-        await createSchoolSportMutation(
-          event,
-          props,
-          sportType,
-          wins,
-          currentImages
-        );
-        break;
-      case 'Venue':
-        await createVenueMutation(event, props, currentImages);
-        break;
-      default:
-        break;
+    try {
+      switch (event.target.entryType.value) {
+        case 'Hall of Fame':
+          await createHallOfFameMutation(
+            event,
+            props,
+            sportType,
+            notableAchievements,
+            currentImages,
+            addNewSport
+          );
+          break;
+        case 'Professional Team':
+          await createProfessionalTeamMutation(
+            event,
+            props,
+            professionalSport,
+            currentImages
+          );
+          break;
+        case 'School':
+          await createSchoolSportMutation(
+            event,
+            props,
+            sportType,
+            wins,
+            currentImages
+          );
+          break;
+        case 'Venue':
+          await createVenueMutation(event, props, currentImages);
+          break;
+        default:
+          break;
+      }
+      const addViewContainer = document.querySelector('.add-entry');
+      addViewContainer.classList.add('add-entry-reverse');
+
+      addViewContainer.addEventListener('animationend', () => {
+        props.onFormSubmit();
+      });
+    } catch (error) {
+      console.log('Error: could not create entry', error);
+      window.alert('Error: could not create entry', error);
+      setHasSubmitted(false);
     }
-    props.onFormSubmit();
   };
 
   //===============================================================================================
@@ -307,7 +340,11 @@ export default function AddEntry(props) {
                     <Heading level={6} marginTop={'1em'}>
                       Sport
                     </Heading>
-                    <SportSelection name='sport' onChange={onSportTypeChange} />
+                    <SportSelection
+                      name='sport'
+                      onChange={onSportTypeChange}
+                      onAddSport={setAddNewSport}
+                    />
                   </Flex>
                 ) : null}
                 {entryType === 'Professional Team' && (
@@ -429,7 +466,11 @@ export default function AddEntry(props) {
               >
                 Cancel
               </Button>
-              <Button isDisabled={!showSubmit} type='submit'>
+              <Button
+                isDisabled={!showSubmit}
+                isLoading={hasSubmitted}
+                type='submit'
+              >
                 Submit
               </Button>
             </Flex>

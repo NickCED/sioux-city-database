@@ -13,25 +13,18 @@ import { v4 as uuidv4 } from 'uuid';
 import './Win.css';
 import { YearSelector } from './YearSelector';
 
+//win Component
 export default function Win(props) {
-  const [added, setAdded] = useState(() => {
-    console.log('props.winList', props.winList);
-    if (props.winList === undefined) return [];
+  // State Variables
+  const [added, setAdded] = useState(() => getInitialWins(props.winList));
+  const [showDescriptionEditor, setShowDescriptionEditor] = useState(null);
+  // State Variable for Drag and Drop
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
-    if (props.winList.length > 0) {
-      const wins = [];
-      for (let i = 0; i < props.winList.length; i++) {
-        const win = JSON.parse(`${props.winList[i]}`);
-        wins.push(win);
-      }
-      return wins;
-    }
-    return [];
-  });
+  //Refs
   const descriptionRef = useRef();
   const inputRef = useRef();
   const yearRef = useRef();
-  const [showDescriptionEditor, setShowDescriptionEditor] = useState(null);
 
   useEffect(() => {
     if (showDescriptionEditor) {
@@ -39,6 +32,8 @@ export default function Win(props) {
     }
   }, [showDescriptionEditor]);
 
+  //====================================================================================================
+  // Functions for Handling Add, Edit, and Delete of Wins
   const addWin = () => {
     const newWin = inputRef.current.value;
     const newYear = yearRef.current.value;
@@ -78,8 +73,9 @@ export default function Win(props) {
     setAdded(updatedWinsList);
     props.onWinListChange(updatedWinsList);
   };
-  const [draggingIndex, setDraggingIndex] = useState(null);
 
+  //====================================================================================================
+  // Functions for Drag and Drop
   function handleDragStart(e, index) {
     setDraggingIndex(index);
     e.dataTransfer.effectAllowed = 'move';
@@ -125,6 +121,9 @@ export default function Win(props) {
   function handleDragEnd(e) {
     setDraggingIndex(null);
   }
+
+  //====================================================================================================
+  // Render Component
   return (
     <div
       className='wins'
@@ -273,4 +272,25 @@ export default function Win(props) {
       ))}
     </div>
   );
+}
+
+//Function for getting initial state of wins
+function getInitialWins(winList) {
+  if (winList === undefined) {
+    return [];
+  }
+
+  if (winList.length === 0) {
+    return [];
+  }
+  if (winList.length > 0) {
+    const wins = [];
+    winList.forEach((win) => {
+      const winObj = JSON.parse(`${win}`);
+      wins.push(winObj);
+    });
+    return wins;
+  }
+
+  return [];
 }

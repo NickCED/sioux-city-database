@@ -21,14 +21,22 @@ const createSchoolSportMutation = async (
       e.target.school.options[e.target.school.selectedIndex].textContent
     }`;
   console.log('name : ', name);
-
+  let uploadingImages;
   try {
-    const uploadingImages = await saveImages(
+    uploadingImages = await saveImages(
       currentImages,
       'Images',
       props.currentUser
     );
+  } catch (err) {
+    console.log('error uploading these images : ', err);
+    window.alert(
+      'There was an error uploading these images, please try deleting and reuploading. '
+    );
+    throw err;
+  }
 
+  try {
     await API.graphql({
       query: createSchoolSport,
       variables: {
@@ -50,8 +58,7 @@ const createSchoolSportMutation = async (
     });
   } catch (err) {
     console.log('error creating School Sport: ', err);
-    window.alert('Error creating School Sport. Please try again.');
-    return;
+    throw err;
   }
 
   if (

@@ -32,6 +32,7 @@ export default function FileBrowser({
         const initialFiles = await getImages(props.viewIds);
         if (initialFiles.length > 0) {
           setFilesList(initialFiles);
+          props.onViewIds(initialFiles);
         }
       }
       getImagesFromS3();

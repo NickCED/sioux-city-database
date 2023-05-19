@@ -5,98 +5,116 @@ import { deleteImages } from './SaveImage';
 // entry comes from the confirmDeleteEntry function in AllEntries.js
 // entry comes from the row.orginal in AllEntries.js
 export const handleDeleteEntry = async (entry) => {
-  switch (entry.entryType) {
-    case 'Venue':
-      try {
-        const result = await API.graphql({
+  if (!entry || !entry.entryType) return console.error('no entry or entryType');
+
+  try {
+    switch (entry.entryType) {
+      case 'Venue':
+        const venueResult = await API.graphql({
           query: queries.getVenue,
           variables: { id: entry.id },
         });
-        const images = result.data.getVenue.images;
 
-        await deleteImages(images);
+        if (!venueResult.data || !venueResult.data.getVenue) {
+          console.error('Failed to get venue');
+          return;
+        }
+
+        const venueImages = venueResult.data.getVenue.images;
+        await deleteImages(venueImages);
 
         await API.graphql({
           query: mutations.deleteVenue,
           variables: { input: { id: entry.id } },
         });
-      } catch (e) {
-        console.log(e);
-      }
-      break;
-    case 'Hall of Fame':
-      try {
-        const result = await API.graphql({
+
+        break;
+
+      case 'Hall of Fame':
+        const hallofFameResult = await API.graphql({
           query: queries.getHallOfFame,
           variables: { id: entry.id },
         });
-        const images = result.data.getHallOfFame.images;
 
-        await deleteImages(images);
+        if (!hallofFameResult.data || !hallofFameResult.data.getHallOfFame) {
+          console.error('Failed to get hall of fame');
+          return;
+        }
+
+        const hallofFameImages = hallofFameResult.data.getHallOfFame.images;
+
+        await deleteImages(hallofFameImages);
 
         await API.graphql({
           query: mutations.deleteHallOfFame,
           variables: { input: { id: entry.id } },
         });
-      } catch (e) {
-        console.log(e);
-      }
-      break;
-    case 'Professional Team':
-      console.log('deleting professional team', entry);
-      try {
-        const result = await API.graphql({
+
+        break;
+
+      case 'Professional Team':
+        console.log('deleting professional team', entry);
+
+        const professionalTeamResult = await API.graphql({
           query: queries.getProfessionalTeam,
           variables: { teamId: entry.teamId },
         });
-        const images = result.data.getProfessionalTeam.images;
 
-        await deleteImages(images);
+        if (
+          !professionalTeamResult.data ||
+          !professionalTeamResult.data.getProfessionalTeam
+        ) {
+          console.error('Failed to get professional team');
+          return;
+        }
+
+        const professionalTeamImages =
+          professionalTeamResult.data.getProfessionalTeam.images;
+
+        await deleteImages(professionalTeamImages);
 
         await API.graphql({
           query: mutations.deleteProfessionalTeam,
           variables: { input: { teamId: entry.teamId } },
         });
-      } catch (e) {
-        console.log(e);
-      }
-      break;
-    case 'School':
-      try {
-        const result = await API.graphql({
+
+        break;
+
+      case 'School':
+        const schoolResult = await API.graphql({
           query: queries.getSchoolSport,
           variables: { sportId: entry.sportId },
         });
-        const images = result.data.getSchoolSport.images;
 
-        if (images.length > 0) {
-          await deleteImages(images);
+        if (!schoolResult.data || !schoolResult.data.getSchoolSport) {
+          console.error('Failed to get school sport');
+          return;
+        }
+
+        const schoolImages = schoolResult.data.getSchoolSport.images;
+
+        if (schoolImages.length > 0) {
+          await deleteImages(schoolImages);
         }
         await API.graphql({
           query: mutations.deleteSchoolSport,
           variables: { input: { sportId: entry.sportId } },
         });
-      } catch (e) {
-        console.log(e);
-      }
-      try {
-        const result = await API.graphql({
-          query: queries.getSchool,
-          variables: { id: entry.school },
-        });
 
-        const updatedSports = result.data.getSchool.sportsIds.filter(
+        const updatedSports = schoolResult.data.getSchool.sportsIds.filter(
           (sportId) => sportId !== entry.sportId
         );
+
         await API.graphql({
           query: mutations.updateSchool,
-          variables: { input: { id: entry.school, sportsIds: updatedSports } },
+          variables: {
+            input: { id: entry.school, sportsIds: updatedSports },
+          },
         });
-      } catch (e) {
-        console.log('error deleting sport from school', e);
-      }
-      break;
-    default:
-      console.log('Unknown entry type');
-  }
+
+        break;
+      default:
+        console.log('Unknown entry type');
+    }
+  } catch (error) {}
 };

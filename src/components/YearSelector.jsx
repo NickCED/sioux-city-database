@@ -1,48 +1,46 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { SelectField } from '@aws-amplify/ui-react';
 
 export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
-  const currentYear = new Date().getFullYear();
-  const [year, setYear] = React.useState(props.initYear);
-  const showChange = props.showChange ? props.showChange : false;
-  const initialYear =
-    props.initYear === 1
-      ? 'Active'
-      : props.initYear === ''
-      ? ''
-      : props.initYear;
-  const [changedYear, setChangedYear] = React.useState(false);
+  // State Hooks
+  const [year, setYear] = useState(props.initYear);
+  const [style, setStyle] = useState({});
+
+  // Configuration
+  const showChange = props.showChange || false;
+  const initialYear = props.initYear === 1 ? 'Active' : props.initYear;
+  const extendOnChangeEvent = props.onChange || false;
+
+  // Styling for showing changed year
   const showChangeStyle = {
     color: 'blue',
     fontWeight: 'bold',
   };
-  const [style, setStyle] = React.useState({});
-  const newOptions = [];
-  for (let i = props.max; i >= props.min; i--) {
-    newOptions.push(
-      <option key={i} value={i}>
-        {i === 1 ? 'Active' : i}
-        {i === initialYear && changedYear ? '***' : ''}
-      </option>
-    );
-  }
 
+  // Create Year Options
+  const options = Array.from(
+    { length: props.max - props.min + 1 },
+    (year, i) => props.max - i
+  ).map((value) => (
+    <option key={value} value={value}>
+      {value}
+      {value === props.initYear && showChange ? '***' : ''}
+    </option>
+  ));
+
+  // Event handler for option change
   const handleChange = (e) => {
+    const selectedValue = e.target.value;
+    const initYearAsString = String(initialYear);
+    const isSelectedYearChanged = String(selectedValue) !== initYearAsString;
+
     if (showChange) {
-      if (`${e.target.value}` === `${initialYear}`) {
-        setStyle({});
-        console.log('no styling');
-        setChangedYear(false);
-      }
-      if (`${e.target.value}` !== `${initialYear}`) {
-        setStyle(showChangeStyle);
-        console.log('styling');
-        setChangedYear(true);
-      }
+      setStyle(isSelectedYearChanged ? showChangeStyle : {});
     }
 
-    setYear(e.target.value);
-    if (props.onChange) props.onChange(e);
+    setYear(selectedValue);
+
+    if (extendOnChangeEvent) props.onChange(e);
   };
 
   return (
@@ -55,7 +53,7 @@ export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
     >
       <option value={''}>Select a year</option>
       {props.active ? <option value={1}>Active</option> : null}
-      {newOptions}
+      {options}
     </SelectField>
   );
 });

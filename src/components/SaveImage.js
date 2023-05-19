@@ -151,47 +151,53 @@ export async function getImages(
 //Delete Images
 //=======================================================
 export async function deleteImages(imageIds, location = 'Images') {
-  if (imageIds === null || imageIds === undefined) return;
-  if (imageIds.length > 0) {
-    const imageOperations = [];
+  console.log('deleting images : ', imageIds);
+  if (!Array.isArray(imageIds) || imageIds.length === 0) {
+    console.log('no images to delete');
+    return;
+  }
 
-    for (const imageID of imageIds) {
-      console.log('imageID : ', imageID);
-      if (!imageID.useAWS) continue;
-      const key = `${location}/${imageID.imageID || imageID}`;
-      let imageData;
-      try {
-        imageData = await API.graphql({
-          query: getImage,
-          variables: {
-            imageID: imageID.imageID || imageID,
-          },
-        });
-      } catch (err) {
-        console.log('error getting image data before delete: ', err);
-        throw err;
-      }
+  const imageOperations = [];
 
-      const thumbnailKey = `${location}/${imageData.data.getImage.thumbnailID}`;
+  for (const imageID of imageIds) {
+    console.log('deleting image : ', imageID);
 
-      imageOperations.push(
-        Storage.remove(key)
-          .then((result) => {})
-          .catch((err) => {
-            console.log('error deleting image : ', err);
-            return null;
-          })
-      );
-      imageOperations.push(
-        Storage.remove(thumbnailKey)
-          .then((result) => {})
-          .catch((err) => {
-            console.log('error deleting thumbnail : ', err);
-            return null;
-          })
-      );
+    if (typeof imageID === 'object' && !imageID.useAWS) {
+      console.log('image is not on AWS');
+      continue;
+    }
 
-      await API.graphql({
+    const key = `${location}/${imageID.imageID || imageID}`;
+    let imageData;
+    try {
+      imageData = await API.graphql({
+        query: getImage,
+        variables: {
+          imageID: imageID.imageID || imageID,
+        },
+      });
+    } catch (err) {
+      console.error('Error getting image data before delete: ', err);
+      throw err;
+    }
+
+    const thumbnailKey = `${location}/${imageData.data.getImage.thumbnailID}`;
+
+    imageOperations.push(
+      Storage.remove(key).catch((err) => {
+        console.error('Error deleting image from S3: ', err);
+        return null;
+      })
+    );
+    imageOperations.push(
+      Storage.remove(thumbnailKey).catch((err) => {
+        console.error('Error deleting thumbnail from S3: ', err);
+        return null;
+      })
+    );
+
+    imageOperations.push(
+      API.graphql({
         query: deleteImage,
         variables: {
           input: {
@@ -199,13 +205,15 @@ export async function deleteImages(imageIds, location = 'Images') {
           },
         },
       }).catch((err) => {
-        console.log('error deleting image from db: ', err);
+        console.error('Error deleting image from DynamoDB: ', err);
         return null;
-      });
-    }
-
+      })
+    );
+  }
+  try {
     await Promise.all(imageOperations);
-  } else {
-    console.log('no images to delete');
+  } catch (err) {
+    console.error('Error performing image operations: ', err);
+    throw err;
   }
 }

@@ -9,13 +9,21 @@ const createProfessionalSportMutation = async (
 
   currentImages
 ) => {
-  console.log('notableAchievements: ', notableAchievements);
+  let uploadingImages;
   try {
-    const uploadingImages = await saveImages(
+    uploadingImages = await saveImages(
       currentImages,
       'Images',
       props.currentUser
     );
+  } catch (err) {
+    console.log('error uploading these images : ', err);
+    window.alert(
+      'There was an error uploading these images, please try deleting and reuploading. '
+    );
+    throw err;
+  }
+  try {
     await API.graphql({
       query: createHallOfFame,
       variables: {
@@ -34,6 +42,7 @@ const createProfessionalSportMutation = async (
     });
   } catch (err) {
     console.log('error creating Hall of Fame : ', err);
+    throw err;
   }
 };
 
