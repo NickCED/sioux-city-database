@@ -73,13 +73,6 @@ export default function AllEntries(props) {
     setRowHeight(value);
   };
 
-  const confirmDelete = (e, entry) => {
-    console.log('confirm delete');
-    if (window.confirm('Are you sure you want to delete this entry?')) {
-      handleDeleteEntry(entry);
-    }
-  };
-
   useEffect(() => {
     const fetchEntries = async () => {
       const queries = [
@@ -181,16 +174,26 @@ export default function AllEntries(props) {
         Header: 'Delete',
         textAlign: 'center',
         minWidth: '70px',
-        Cell: ({ row }) => (
-          <Button
-            border={'none'}
-            id={row.original.id + 'button'}
-            isLoading={false}
-            onClick={(e) => confirmDelete(e, row.original)}
-          >
-            <IoCloseOutline size={rowHeight} />
-          </Button>
-        ),
+        Cell: ({ row }) => {
+          const [deleteLoading, setDeleteLoading] = useState(false);
+          const confirmDelete = (e, entry) => {
+            console.log('confirm delete');
+            if (window.confirm('Are you sure you want to delete this entry?')) {
+              setDeleteLoading(true);
+              handleDeleteEntry(entry);
+            }
+          };
+          return (
+            <Button
+              border={'none'}
+              id={row.original.id + 'button'}
+              isLoading={deleteLoading}
+              onClick={(e) => confirmDelete(e, row.original)}
+            >
+              <IoCloseOutline size={rowHeight} />
+            </Button>
+          );
+        },
       },
     ],
     [props, rowHeight]

@@ -38,6 +38,7 @@ export async function saveImages(images, location = 'Images', user) {
       } = image;
       const key = `${location}/${imageID}`;
       const thumbnailKey = `${location}/${thumbnailID}`;
+      imageIds.push(imageID);
 
       imageOperations.push(
         Storage.put(key, blob, {
@@ -45,11 +46,12 @@ export async function saveImages(images, location = 'Images', user) {
           cacheControl: 'max-age=2592000',
         })
           .then((result) => {
-            imageIds.push(imageID);
             console.log('img uploaded : ', result);
           })
           .catch((err) => {
             console.log('error uploading image : ', err);
+            imageIds.filter((id) => id !== imageID);
+            window.alert('Error uploading image : ', name);
             return null;
           })
       );

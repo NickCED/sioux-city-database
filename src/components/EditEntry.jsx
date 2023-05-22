@@ -133,6 +133,7 @@ export default function EditEntry(props) {
   };
 
   const handleSubmit = async (event, props) => {
+    if (hasSubmitted) return;
     setHasSubmitted(true);
     let awaitEvent;
     console.log('handleSubmit: ', props);

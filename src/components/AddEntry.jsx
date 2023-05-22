@@ -163,6 +163,7 @@ export default function AddEntry(props) {
     }
   };
   const handleSubmit = async (event, props) => {
+    if (hasSubmitted) return;
     setHasSubmitted(true);
 
     if (

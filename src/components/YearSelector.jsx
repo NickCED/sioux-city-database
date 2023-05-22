@@ -8,7 +8,14 @@ export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
 
   // Configuration
   const showChange = props.showChange || false;
-  const initialYear = props.initYear === 1 ? 'Active' : props.initYear;
+  let initialYear;
+  if (props.initYear === 0) {
+    initialYear = 'Unknown';
+  } else if (props.initYear === 1) {
+    initialYear = 'Active';
+  } else {
+    initialYear = props.initYear;
+  }
   const extendOnChangeEvent = props.onChange || false;
 
   // Styling for showing changed year
@@ -53,6 +60,7 @@ export const YearSelector = forwardRef(({ selectName, ...props }, ref) => {
     >
       <option value={''}>Select a year</option>
       {props.active ? <option value={1}>Active</option> : null}
+      {props.unknown ? <option value={0}>Unknown</option> : null}
       {options}
     </SelectField>
   );

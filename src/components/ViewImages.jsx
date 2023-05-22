@@ -13,7 +13,7 @@ export default function ViewImages(props) {
   const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [currentImageName, setCurrentImageName] = useState('');
   const popup = document.getElementById('imageModal');
-  console.log('props', props);
+
   const changeImage = (image, index) => {
     setCurrentImageName(image.name);
     setCurrentImageUrl(image.url);

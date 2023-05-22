@@ -186,7 +186,12 @@ export default function EditSchool(props) {
                   min={1800}
                   showChange={true}
                   max={currentYear}
-                  initYear={props.school.startYear || ''}
+                  unknown={true}
+                  initYear={
+                    props.school.startYear === 0
+                      ? 0
+                      : props.school.startYear || ''
+                  }
                 />
               </Flex>
               <Flex
@@ -203,8 +208,11 @@ export default function EditSchool(props) {
                   min={yearStart || props.school.startYear || 1800}
                   max={currentYear}
                   active={true}
+                  unknown={true}
                   showChange={true}
-                  initYear={props.school.endYear || ''}
+                  initYear={
+                    props.school.endYear === 0 ? 0 : props.school.endYear || ''
+                  }
                   onChange={onYearEndChange}
                 />
               </Flex>
