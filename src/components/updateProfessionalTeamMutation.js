@@ -33,8 +33,12 @@ const updateProfessionalTeamMutation = async (
         input: {
           name: e.target.name.value,
           entryType: props.entry.entryType,
-          startYear: e.target.startYear.value || props.entry.startYear || null,
-          endYear: e.target.endYear.value || props.entry.endYear || null,
+          startYear:
+            e.target.startYear.value === ''
+              ? null
+              : props.school.startYear || null,
+          endYear:
+            e.target.endYear.value === '' ? null : props.school.endYear || null,
 
           teamId: props.entry.teamId,
           description: e.target.description.value,

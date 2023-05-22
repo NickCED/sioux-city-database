@@ -49,7 +49,7 @@ export default function ShowProfessionalSports(props) {
                 border={'none'}
                 height={'80%'}
                 onClick={(e) => {
-                  props.onEditProfessionalSport(professionalSport.id);
+                  props.onEditProfessionalSport(professionalSport);
                 }}
               >
                 <IoPencilOutline size={'1.5rem'} />
@@ -64,7 +64,7 @@ export default function ShowProfessionalSports(props) {
             </Flex>
           </Flex>
         ))}
-        <Flex
+        {/* <Flex
           className='show-professional-sports-list-card add-professional-sport'
           onClick={() => handleAddProfessionalSports()}
         >
@@ -77,7 +77,7 @@ export default function ShowProfessionalSports(props) {
           <Text className='add-professional-sport-text'>
             Add Professional Sport
           </Text>
-        </Flex>
+        </Flex> */}
       </div>
     </div>
   );

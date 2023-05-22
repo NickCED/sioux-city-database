@@ -154,6 +154,21 @@ function App({ signOut }) {
     }
   }, [sportsData]);
 
+  const [showEditProfessionalSport, setShowEditProfessionalSport] =
+    useState(false);
+
+  const handleEditProfessionalSport = (sport) => {
+    console.log('sport: ', sport);
+    setEditSportData(sport);
+    setShowEditProfessionalSport(true);
+  };
+  const handleProfessionalCancel = () => {
+    setShowEditProfessionalSport(false);
+  };
+  const handleProfessionalSubmit = () => {
+    setShowEditProfessionalSport(false);
+  };
+
   // ================================================================================================================
 
   const [searchText, setSearchText] = useState('');
@@ -167,23 +182,6 @@ function App({ signOut }) {
     if (isDisabled) {
       setSearchText('');
     }
-  };
-
-  // ================================================================================================================
-  // Edit Professional Sport
-  const [showEditProfessionalSport, setShowEditProfessionalSport] =
-    useState(false);
-
-  const handleAddProfessionalSport = (sport) => {
-    console.log('sport: ', sport);
-    setEditSportData(sportsData.find((s) => s.sport === sport));
-    setShowEditProfessionalSport(true);
-  };
-  const handleProfessionalCancel = () => {
-    setShowEditProfessionalSport(false);
-  };
-  const handleProfessionalSubmit = () => {
-    setShowEditProfessionalSport(false);
   };
 
   // ================================================================================================================
@@ -341,9 +339,7 @@ function App({ signOut }) {
             collegeData={collegeData}
             professionalData={professionalData}
             clubData={clubData}
-            onEditProfessionalSport={(sport) =>
-              handleAddProfessionalSport(sport)
-            }
+            onEditProfessionalSport={handleEditProfessionalSport}
             onEditSchool={handleEditSchool}
           />
         </div>

@@ -211,7 +211,11 @@ export default function EditSchool(props) {
                   unknown={true}
                   showChange={true}
                   initYear={
-                    props.school.endYear === 0 ? 0 : props.school.endYear || ''
+                    props.school.endYear === 0
+                      ? 0
+                      : props.school.endYear
+                      ? props.school.endYear
+                      : ''
                   }
                   onChange={onYearEndChange}
                 />

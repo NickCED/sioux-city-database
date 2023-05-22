@@ -43,8 +43,13 @@ const updateSchoolMutation = async (
         input: {
           id: props.school.id,
           location: e.target.location.value || '',
-          startYear: e.target.startYear.value || props.school.startYear || null,
-          endYear: e.target.endYear.value || props.school.endYear || null,
+          startYear:
+            e.target.startYear.value === ''
+              ? null
+              : props.school.startYear || null,
+          endYear:
+            e.target.endYear.value === '' ? null : props.school.endYear || null,
+
           description: e.target.description.value || '',
           notes: e.target.notes.value || '',
           logoUrl: uploadingImages ? uploadingImages[0] : null,
