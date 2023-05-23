@@ -553,7 +553,7 @@ export default function EditEntry(props) {
                 <FileBrowser
                   heading='Upload Images for Gallery'
                   onFilesListChange={handleImageListChange}
-                  onDeleteFilesListChange={handleDeleteImageListChange}
+                  onDeletedFilesListChange={handleDeleteImageListChange}
                   viewIds={props.entry.images || []}
                   onViewIds={(files) => setCurrentImages(files)}
                 />

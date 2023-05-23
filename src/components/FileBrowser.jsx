@@ -38,6 +38,12 @@ export default function FileBrowser({
       getImagesFromS3();
     }
   }, []);
+  useEffect(() => {
+    props.onFilesListChange(filesList);
+  }, [filesList]);
+  useEffect(() => {
+    props.onDeletedFilesListChange(deleteFilesList);
+  }, [deleteFilesList]);
 
   const handleDelete = (imageID) => {
     const updatedFilesList = filesList.filter(
@@ -51,8 +57,6 @@ export default function FileBrowser({
     if (updatedFilesList.length === 0 && singleFile) {
       setButtonText('Upload Image');
     }
-    props.onDeletedFilesListChange(updatedDeletedFilesList);
-    props.onFilesListChange(updatedFilesList);
   };
 
   const handleEdit = (imageID) => {
@@ -63,7 +67,6 @@ export default function FileBrowser({
         file.imageID === imageID ? { ...file, name: newTitle } : file
       );
       setFilesList(updatedFilesList);
-      props.onFilesListChange(updatedFilesList);
     }
   };
 
@@ -106,7 +109,7 @@ export default function FileBrowser({
 
           console.log('Thanks!'); // Log the button text to the console for debugging purposes.
         }
-        props.onFilesListChange(updatedFilesList);
+
         inputRef.current.value = '';
       }
 
