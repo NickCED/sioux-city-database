@@ -72,6 +72,59 @@ export default function ViewImages(props) {
           >
             <IoCloseOutline size={'1.5rem'} pointerEvents={'none'} />
           </Button>
+          <Button
+            border={'none'}
+            className='back-icon'
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const index = props.images.findIndex(
+                (image) => image.url === currentImageUrl
+              );
+              if (index > 0) {
+                const image = props.images[index - 1];
+                setCurrentImageName(image.name);
+                setCurrentImageUrl(image.url);
+              }
+            }}
+            style={{
+              zIndex: 100,
+              position: 'absolute',
+              top: '50%',
+              left: '0.5rem',
+              cursor: 'pointer',
+              margin: '0.5rem 0.5rem 0 0',
+            }}
+          >
+            <IoChevronBack size={'1.5rem'} pointerEvents={'none'} />
+          </Button>
+          <Button
+            border={'none'}
+            className='forward-icon'
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const index = props.images.findIndex(
+                (image) => image.url === currentImageUrl
+              );
+              if (index < props.images.length - 1) {
+                const image = props.images[index + 1];
+                setCurrentImageName(image.name);
+                setCurrentImageUrl(image.url);
+              }
+            }}
+            style={{
+              zIndex: 100,
+              position: 'absolute',
+              top: '50%',
+              right: '0.5rem',
+              cursor: 'pointer',
+              margin: '0.5rem 0.5rem 0 0',
+            }}
+          >
+            <IoChevronForward size={'1.5rem'} pointerEvents={'none'} />
+          </Button>
+
           <Flex
             flex={0}
             height={height}
