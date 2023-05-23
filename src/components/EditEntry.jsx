@@ -508,7 +508,9 @@ export default function EditEntry(props) {
                 )}
 
                 <Heading level={6} marginTop={'1em'}>
-                  Description
+                  {entryType === 'School'
+                    ? 'Without Wins Description'
+                    : 'Description'}
                 </Heading>
                 <TextAreaField
                   name='description'
