@@ -99,6 +99,7 @@ export default function EditProfessionalSport(props) {
     }
   };
   const handleSubmit = async (e, props) => {
+    if (hasSubmitted) return;
     setHasSubmitted(true);
     let awaitEvent;
     try {
@@ -232,7 +233,11 @@ export default function EditProfessionalSport(props) {
               >
                 Cancel
               </Button>
-              <Button isDisabled={!hasChanged || hasSubmitted} type='submit'>
+              <Button
+                isDisabled={!hasChanged}
+                isLoading={hasSubmitted}
+                type='submit'
+              >
                 Submit
               </Button>
             </Flex>
