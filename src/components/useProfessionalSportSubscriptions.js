@@ -3,8 +3,8 @@ import { API, Hub } from 'aws-amplify';
 import * as subscriptions from '../graphql/subscriptions';
 import { CONNECTION_STATE_CHANGE } from '@aws-amplify/pubsub';
 
-export function useOtherSubscriptions() {
-  const [professionalSportData, setProfessionalSportData] = useState([]);
+export function useProfessionalSportSubscriptions() {
+  const [sportsData, setSportsData] = useState([]);
 
   useEffect(() => {
     Hub.listen('api', (data) => {
@@ -22,7 +22,7 @@ export function useOtherSubscriptions() {
       next: (professionalSportData) => {
         const newProfessionalSport =
           professionalSportData.value.data.onCreateProfessionalSport;
-        setProfessionalSportData((prev) => [...prev, newProfessionalSport]);
+        setSportsData((prev) => [...prev, newProfessionalSport]);
       },
     });
 
@@ -32,7 +32,7 @@ export function useOtherSubscriptions() {
       next: (professionalSportData) => {
         const updatedProfessionalSport =
           professionalSportData.value.data.onUpdateProfessionalSport;
-        setProfessionalSportData((prev) => {
+        setSportsData((prev) => {
           const oldProfessionalSportEntries = prev.filter(
             (entry) => entry.id !== updatedProfessionalSport.id
           );
@@ -51,7 +51,7 @@ export function useOtherSubscriptions() {
       next: (professionalSportData) => {
         const deletedProfessionalSport =
           professionalSportData.value.data.onDeleteProfessionalSport;
-        setProfessionalSportData((prev) =>
+        setSportsData((prev) =>
           prev.filter((entry) => entry.id !== deletedProfessionalSport.id)
         );
       },
@@ -64,5 +64,5 @@ export function useOtherSubscriptions() {
     };
   }, []);
 
-  return { professionalSportData, setProfessionalSportData };
+  return { sportsData, setSportsData };
 }

@@ -100,7 +100,8 @@ export async function getImages(
   shouldDownload = false
 ) {
   const images = [];
-
+  console.log('getting images : ', imageIds);
+  if (imageIds.length === 0) return images;
   for (const imageID of imageIds) {
     const key = `${location}/${imageID}`;
 

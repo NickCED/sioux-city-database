@@ -16,7 +16,7 @@ import { listProfessionalSports } from './graphql/queries';
 import EditProfessionalSport from './components/EditProfessionalSport';
 import { listSchools } from './graphql/queries';
 import { useSchoolSubscriptions } from './components/useSchoolSubscriptions';
-
+import { useProfessionalSportSubscriptions } from './components/useProfessionalSportSubscriptions';
 import { Auth, API } from 'aws-amplify';
 
 function App({ signOut }) {
@@ -116,7 +116,7 @@ function App({ signOut }) {
 
   // ================================================================================================================
   //Professional Sports
-  const [sportsData, setSportsData] = useState([]);
+  const { sportsData, setSportsData } = useProfessionalSportSubscriptions();
   const [editSportData, setEditSportData] = useState([]);
   const [professionalData, setProfessionalData] = useState([]);
   const [clubData, setClubData] = useState([]);
