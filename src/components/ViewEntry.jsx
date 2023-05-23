@@ -298,6 +298,14 @@ export default function ViewEntry(props) {
                             whiteSpace: 'wrap',
                           }}
                         >
+                          <span
+                            style={{
+                              color: 'rgb(176, 124, 2)',
+                              padding: '.5rem',
+                            }}
+                          >
+                            {achievement.year}
+                          </span>{' '}
                           {achievement.text}
                         </Text>
                       ))}
