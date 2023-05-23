@@ -14,6 +14,7 @@ import {
   Button,
   Alert,
   TextAreaField,
+  Autocomplete,
 } from '@aws-amplify/ui-react';
 import { IoCloseOutline } from 'react-icons/io5';
 
@@ -70,7 +71,13 @@ export default function AddEntry(props) {
     console.log('handleAchievementListChange: ', notableAchievementsArray);
     setNotableAchievements(notableAchievementsArray);
   };
+  const [showNoWinsDescription, setShowNoWinsDescription] = useState(true);
   const handleWinListChange = (wins) => {
+    if (wins.length === 0 || wins === undefined) {
+      setShowNoWinsDescription(true);
+    } else {
+      setShowNoWinsDescription(false);
+    }
     const winsArray = wins.map((win) => JSON.stringify(win));
     setWins(winsArray);
   };
@@ -434,7 +441,9 @@ export default function AddEntry(props) {
                   </Flex>
                 )}
                 <Heading level={6} marginTop={'1em'}>
-                  Description
+                  {entryType === 'School'
+                    ? 'Without Wins Description'
+                    : 'Description'}
                 </Heading>
                 <TextAreaField name='description' placeholder='Description' />
                 {entryType === 'School' && (

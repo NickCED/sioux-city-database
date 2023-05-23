@@ -221,10 +221,10 @@ export default function AllEntries(props) {
             title='Schools'
             onClick={() => handleTabChange('Schools')}
           ></TabItem>
-          {/* <TabItem
+          <TabItem
             title='Professional Sports'
             onClick={() => handleTabChange('Professional Sports')}
-          ></TabItem> */}
+          ></TabItem>
         </Tabs>
         {selectedTab === 'Entries' && (
           <Flex
@@ -377,7 +377,7 @@ export default function AllEntries(props) {
           />
         </div>
       )}
-      {/* {selectedTab === 'Professional Sports' && (
+      {selectedTab === 'Professional Sports' && (
         <div
           style={{
             flex: '1 1 auto',
@@ -391,7 +391,7 @@ export default function AllEntries(props) {
             }
           />
         </div>
-      )} */}
+      )}
     </Flex>
   );
 }

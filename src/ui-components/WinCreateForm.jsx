@@ -23,26 +23,20 @@ export default function WinCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    winTitle: "",
-    year: "",
-    description: "",
+    winID: "",
+    name: "",
   };
-  const [winTitle, setWinTitle] = React.useState(initialValues.winTitle);
-  const [year, setYear] = React.useState(initialValues.year);
-  const [description, setDescription] = React.useState(
-    initialValues.description
-  );
+  const [winID, setWinID] = React.useState(initialValues.winID);
+  const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setWinTitle(initialValues.winTitle);
-    setYear(initialValues.year);
-    setDescription(initialValues.description);
+    setWinID(initialValues.winID);
+    setName(initialValues.name);
     setErrors({});
   };
   const validations = {
-    winTitle: [{ type: "Required" }],
-    year: [],
-    description: [],
+    winID: [{ type: "Required" }],
+    name: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -70,9 +64,8 @@ export default function WinCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          winTitle,
-          year,
-          description,
+          winID,
+          name,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -119,86 +112,54 @@ export default function WinCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Win title"
+        label="Win id"
         isRequired={true}
         isReadOnly={false}
-        value={winTitle}
+        value={winID}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              winTitle: value,
-              year,
-              description,
+              winID: value,
+              name,
             };
             const result = onChange(modelFields);
-            value = result?.winTitle ?? value;
+            value = result?.winID ?? value;
           }
-          if (errors.winTitle?.hasError) {
-            runValidationTasks("winTitle", value);
+          if (errors.winID?.hasError) {
+            runValidationTasks("winID", value);
           }
-          setWinTitle(value);
+          setWinID(value);
         }}
-        onBlur={() => runValidationTasks("winTitle", winTitle)}
-        errorMessage={errors.winTitle?.errorMessage}
-        hasError={errors.winTitle?.hasError}
-        {...getOverrideProps(overrides, "winTitle")}
+        onBlur={() => runValidationTasks("winID", winID)}
+        errorMessage={errors.winID?.errorMessage}
+        hasError={errors.winID?.hasError}
+        {...getOverrideProps(overrides, "winID")}
       ></TextField>
       <TextField
-        label="Year"
-        isRequired={false}
+        label="Name"
+        isRequired={true}
         isReadOnly={false}
-        type="number"
-        step="any"
-        value={year}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              winTitle,
-              year: value,
-              description,
-            };
-            const result = onChange(modelFields);
-            value = result?.year ?? value;
-          }
-          if (errors.year?.hasError) {
-            runValidationTasks("year", value);
-          }
-          setYear(value);
-        }}
-        onBlur={() => runValidationTasks("year", year)}
-        errorMessage={errors.year?.errorMessage}
-        hasError={errors.year?.hasError}
-        {...getOverrideProps(overrides, "year")}
-      ></TextField>
-      <TextField
-        label="Description"
-        isRequired={false}
-        isReadOnly={false}
-        value={description}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              winTitle,
-              year,
-              description: value,
+              winID,
+              name: value,
             };
             const result = onChange(modelFields);
-            value = result?.description ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.description?.hasError) {
-            runValidationTasks("description", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
-          setDescription(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("description", description)}
-        errorMessage={errors.description?.errorMessage}
-        hasError={errors.description?.hasError}
-        {...getOverrideProps(overrides, "description")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <Flex
         justifyContent="space-between"

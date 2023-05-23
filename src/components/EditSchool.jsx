@@ -70,7 +70,6 @@ export default function EditSchool(props) {
   const [hasChanged, setHasChanged] = React.useState(false);
   const [showSubmit, setShowSubmit] = React.useState(false);
   const handleCloseEditSchool = (e) => {
-    console.log('e.target', e.target);
     if (
       e.target.classList.contains('edit-school') ||
       e.target.classList.contains('close-icon') ||
@@ -100,8 +99,8 @@ export default function EditSchool(props) {
   };
   //YEAR END ==================================================================
   const [yearEnd, setYearEnd] = useState(() => {
-    if (props.school.yearEnd) {
-      return props.school.yearEnd;
+    if (props.school.endYear) {
+      return props.school.endYear;
     }
     return '';
   });

@@ -196,6 +196,7 @@ export default function SchoolSportCreateForm(props) {
     name: "",
     entryType: "",
     description: "",
+    noWinsDescription: "",
     school: "",
     sport: "",
     sportId: "",
@@ -212,6 +213,9 @@ export default function SchoolSportCreateForm(props) {
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [noWinsDescription, setNoWinsDescription] = React.useState(
+    initialValues.noWinsDescription
+  );
   const [school, setSchool] = React.useState(initialValues.school);
   const [sport, setSport] = React.useState(initialValues.sport);
   const [sportId, setSportId] = React.useState(initialValues.sportId);
@@ -227,6 +231,7 @@ export default function SchoolSportCreateForm(props) {
     setName(initialValues.name);
     setEntryType(initialValues.entryType);
     setDescription(initialValues.description);
+    setNoWinsDescription(initialValues.noWinsDescription);
     setSchool(initialValues.school);
     setSport(initialValues.sport);
     setSportId(initialValues.sportId);
@@ -249,6 +254,7 @@ export default function SchoolSportCreateForm(props) {
     name: [],
     entryType: [{ type: "Required" }],
     description: [],
+    noWinsDescription: [],
     school: [],
     sport: [],
     sportId: [{ type: "Required" }],
@@ -289,6 +295,7 @@ export default function SchoolSportCreateForm(props) {
           name,
           entryType,
           description,
+          noWinsDescription,
           school,
           sport,
           sportId,
@@ -356,6 +363,7 @@ export default function SchoolSportCreateForm(props) {
               name: value,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -392,6 +400,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType: value,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -428,6 +437,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description: value,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -453,6 +463,45 @@ export default function SchoolSportCreateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <TextField
+        label="No wins description"
+        isRequired={false}
+        isReadOnly={false}
+        value={noWinsDescription}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              entryType,
+              description,
+              noWinsDescription: value,
+              school,
+              sport,
+              sportId,
+              startYear,
+              endYear,
+              wins,
+              images,
+              notes,
+              createdBy,
+              kioskReady,
+            };
+            const result = onChange(modelFields);
+            value = result?.noWinsDescription ?? value;
+          }
+          if (errors.noWinsDescription?.hasError) {
+            runValidationTasks("noWinsDescription", value);
+          }
+          setNoWinsDescription(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("noWinsDescription", noWinsDescription)
+        }
+        errorMessage={errors.noWinsDescription?.errorMessage}
+        hasError={errors.noWinsDescription?.hasError}
+        {...getOverrideProps(overrides, "noWinsDescription")}
+      ></TextField>
+      <TextField
         label="School"
         isRequired={false}
         isReadOnly={false}
@@ -464,6 +513,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school: value,
               sport,
               sportId,
@@ -500,6 +550,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport: value,
               sportId,
@@ -536,6 +587,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId: value,
@@ -576,6 +628,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -616,6 +669,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -648,6 +702,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -702,6 +757,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -760,6 +816,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -796,6 +853,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,
@@ -832,6 +890,7 @@ export default function SchoolSportCreateForm(props) {
               name,
               entryType,
               description,
+              noWinsDescription,
               school,
               sport,
               sportId,

@@ -76,6 +76,7 @@ export const createSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -100,6 +101,7 @@ export const updateSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -124,6 +126,7 @@ export const deleteSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -503,6 +506,45 @@ export const deleteImage = /* GraphQL */ `
       size
       type
       createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createWin = /* GraphQL */ `
+  mutation CreateWin(
+    $input: CreateWinInput!
+    $condition: ModelWinConditionInput
+  ) {
+    createWin(input: $input, condition: $condition) {
+      winID
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateWin = /* GraphQL */ `
+  mutation UpdateWin(
+    $input: UpdateWinInput!
+    $condition: ModelWinConditionInput
+  ) {
+    updateWin(input: $input, condition: $condition) {
+      winID
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteWin = /* GraphQL */ `
+  mutation DeleteWin(
+    $input: DeleteWinInput!
+    $condition: ModelWinConditionInput
+  ) {
+    deleteWin(input: $input, condition: $condition) {
+      winID
+      name
       createdAt
       updatedAt
     }

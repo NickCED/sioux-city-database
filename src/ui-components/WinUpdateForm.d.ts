@@ -14,26 +14,23 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type WinUpdateFormInputValues = {
-    winTitle?: string;
-    year?: number;
-    description?: string;
+    winID?: string;
+    name?: string;
 };
 export declare type WinUpdateFormValidationValues = {
-    winTitle?: ValidationFunction<string>;
-    year?: ValidationFunction<number>;
-    description?: ValidationFunction<string>;
+    winID?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type WinUpdateFormOverridesProps = {
     WinUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    winTitle?: PrimitiveOverrideProps<TextFieldProps>;
-    year?: PrimitiveOverrideProps<TextFieldProps>;
-    description?: PrimitiveOverrideProps<TextFieldProps>;
+    winID?: PrimitiveOverrideProps<TextFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type WinUpdateFormProps = React.PropsWithChildren<{
     overrides?: WinUpdateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
+    winID?: string;
     win?: Win;
     onSubmit?: (fields: WinUpdateFormInputValues) => WinUpdateFormInputValues;
     onSuccess?: (fields: WinUpdateFormInputValues) => void;

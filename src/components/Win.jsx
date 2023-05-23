@@ -1,10 +1,10 @@
 import {
   Text,
   Heading,
-  TextField,
   Button,
   Flex,
   TextAreaField,
+  Autocomplete,
 } from '@aws-amplify/ui-react';
 import { IoAddOutline, IoCloseOutline, IoPencilOutline } from 'react-icons/io5';
 import { useState, useEffect, useRef } from 'react';
@@ -16,14 +16,20 @@ import { YearSelector } from './YearSelector';
 //win Component
 export default function Win(props) {
   // State Variables
+
   const [added, setAdded] = useState(() => getInitialWins(props.winList));
+  const [winOptions, setWinOptions] = useState(() => {
+    let sortedTexts = added.map((win) => ({ id: win.text, label: win.text }));
+    sortedTexts.sort((a, b) => a.label.localeCompare(b.label));
+    return sortedTexts;
+  });
   const [showDescriptionEditor, setShowDescriptionEditor] = useState(null);
+  const [winAutoCompleteValue, setWinAutoCompleteValue] = useState('');
   // State Variable for Drag and Drop
   const [draggingIndex, setDraggingIndex] = useState(null);
 
   //Refs
   const descriptionRef = useRef();
-  const inputRef = useRef();
   const yearRef = useRef();
 
   useEffect(() => {
@@ -32,10 +38,20 @@ export default function Win(props) {
     }
   }, [showDescriptionEditor]);
 
+  useEffect(() => {
+    let sortedTexts = added.map((win) => ({ id: win.text, label: win.text }));
+    sortedTexts.sort((a, b) => a.label.localeCompare(b.label));
+    setWinOptions(sortedTexts);
+  }, [added]);
+
+  useEffect(() => {
+    console.log('added', added);
+    console.log('winOptions', winOptions);
+  }, []);
   //====================================================================================================
   // Functions for Handling Add, Edit, and Delete of Wins
   const addWin = () => {
-    const newWin = inputRef.current.value;
+    const newWin = winAutoCompleteValue;
     const newYear = yearRef.current.value;
 
     if (newWin === '') return;
@@ -51,7 +67,7 @@ export default function Win(props) {
       ];
       setAdded(updatedWinList);
       props.onWinListChange(updatedWinList);
-      inputRef.current.value = '';
+      setWinAutoCompleteValue('');
       yearRef.current.value = '';
     }
   };
@@ -74,6 +90,16 @@ export default function Win(props) {
     props.onWinListChange(updatedWinsList);
   };
 
+  const handleWinAutoCompleteChange = (e) => {
+    setWinAutoCompleteValue(e.target.value);
+  };
+  const handleWinAutoCompleteSelect = (option) => {
+    const { label } = option;
+    setWinAutoCompleteValue(label);
+  };
+  const handleWinAutoCompleteClear = (e) => {
+    setWinAutoCompleteValue('');
+  };
   //====================================================================================================
   // Functions for Drag and Drop
   function handleDragStart(e, index) {
@@ -136,11 +162,16 @@ export default function Win(props) {
       </Heading>
       <Flex display='flex' direction='row' alignItems='center' gap={'px'}>
         <YearSelector min={1800} max={2023} ref={yearRef} />
-        <TextField
+        <Autocomplete
+          className='win-autocomplete'
+          marginTop={'0.5rem'}
           justifyContent={'flex-start'}
-          ref={inputRef}
-          placeholder='Type here...'
-          grow={1}
+          onChange={handleWinAutoCompleteChange}
+          onSelect={handleWinAutoCompleteSelect}
+          onClear={handleWinAutoCompleteClear}
+          value={winAutoCompleteValue}
+          options={winOptions}
+          placeholder='Enter Win Type here...'
         />
         <Button marginTop={'0.5rem'} border={'none'} onClick={addWin}>
           <IoAddOutline size='1.5rem' />
@@ -230,7 +261,7 @@ export default function Win(props) {
                 textDecoration={'underline'}
                 size='small'
               >
-                {win.description ? 'Edit Description' : 'Add Description'}
+                {win.description ? 'Edit Info' : 'Add Info'}
               </Button>
               <Button
                 border={'none'}
@@ -248,7 +279,7 @@ export default function Win(props) {
               <TextAreaField
                 grow={1}
                 ref={descriptionRef}
-                placeholder='Type description here...'
+                placeholder='Type win information here...'
                 value={win.description}
                 onChange={(e) => {
                   console.log('e.target.value', e.target.value);
@@ -289,6 +320,7 @@ function getInitialWins(winList) {
       const winObj = JSON.parse(`${win}`);
       wins.push(winObj);
     });
+
     return wins;
   }
 

@@ -13,21 +13,18 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type WinCreateFormInputValues = {
-    winTitle?: string;
-    year?: number;
-    description?: string;
+    winID?: string;
+    name?: string;
 };
 export declare type WinCreateFormValidationValues = {
-    winTitle?: ValidationFunction<string>;
-    year?: ValidationFunction<number>;
-    description?: ValidationFunction<string>;
+    winID?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type WinCreateFormOverridesProps = {
     WinCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    winTitle?: PrimitiveOverrideProps<TextFieldProps>;
-    year?: PrimitiveOverrideProps<TextFieldProps>;
-    description?: PrimitiveOverrideProps<TextFieldProps>;
+    winID?: PrimitiveOverrideProps<TextFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type WinCreateFormProps = React.PropsWithChildren<{
     overrides?: WinCreateFormOverridesProps | undefined | null;

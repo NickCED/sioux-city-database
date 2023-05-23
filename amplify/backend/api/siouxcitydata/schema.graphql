@@ -15,6 +15,7 @@ type SchoolSport @model @auth(rules: [{ allow: private }]) {
   name: String
   entryType: String!
   description: String
+  noWinsDescription: String
   school: String
   sport: String
   sportId: String! @primaryKey
@@ -96,4 +97,9 @@ type Image @model @auth(rules: [{ allow: private }]) {
   size: Int
   type: String
   createdBy: String
+}
+
+type Win @model @auth(rules: [{ allow: private }]) {
+  winID: String! @primaryKey
+  name: String!
 }

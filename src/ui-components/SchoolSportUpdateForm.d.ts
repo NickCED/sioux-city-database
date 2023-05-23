@@ -17,6 +17,7 @@ export declare type SchoolSportUpdateFormInputValues = {
     name?: string;
     entryType?: string;
     description?: string;
+    noWinsDescription?: string;
     school?: string;
     sport?: string;
     sportId?: string;
@@ -32,6 +33,7 @@ export declare type SchoolSportUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
     entryType?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
+    noWinsDescription?: ValidationFunction<string>;
     school?: ValidationFunction<string>;
     sport?: ValidationFunction<string>;
     sportId?: ValidationFunction<string>;
@@ -49,6 +51,7 @@ export declare type SchoolSportUpdateFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     entryType?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
+    noWinsDescription?: PrimitiveOverrideProps<TextFieldProps>;
     school?: PrimitiveOverrideProps<TextFieldProps>;
     sport?: PrimitiveOverrideProps<TextFieldProps>;
     sportId?: PrimitiveOverrideProps<TextFieldProps>;

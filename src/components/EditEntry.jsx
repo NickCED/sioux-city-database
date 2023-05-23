@@ -14,6 +14,7 @@ import {
   Button,
   Alert,
   TextAreaField,
+  Autocomplete,
 } from '@aws-amplify/ui-react';
 
 import updateHallOfFameMutation from './updateHallofFameMutation';
@@ -55,10 +56,13 @@ export default function EditEntry(props) {
     return [];
   });
   const [currentImagesToDelete, setCurrentImagesToDelete] = useState([]);
+  const [showNoWinsDescription, setShowNoWinsDescription] = useState(false);
   const [wins, setWins] = useState(() => {
     if (props.entry.wins) {
+      setShowNoWinsDescription(false);
       return props.entry.wins;
     }
+    setShowNoWinsDescription(true);
     return [];
   });
   const [showSubmit, setShowSubmit] = useState(false);
@@ -99,7 +103,13 @@ export default function EditEntry(props) {
   };
 
   // handle Win updates for School entries and Professional Team entries
+
   const handleWinListChange = (wins) => {
+    if (wins.length === 0 || wins === undefined) {
+      setShowNoWinsDescription(true);
+    } else {
+      setShowNoWinsDescription(false);
+    }
     const winsArray = wins.map((win) => JSON.stringify(win));
     winsArray !== props.entry.wins && setHasChanged(true);
     winsArray === props.entry.wins && setHasChanged(false);

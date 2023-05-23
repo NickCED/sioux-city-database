@@ -52,6 +52,7 @@ export const getSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -86,6 +87,7 @@ export const listSchoolSports = /* GraphQL */ `
         name
         entryType
         description
+        noWinsDescription
         school
         sport
         sportId
@@ -368,6 +370,41 @@ export const listImages = /* GraphQL */ `
         size
         type
         createdBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getWin = /* GraphQL */ `
+  query GetWin($winID: String!) {
+    getWin(winID: $winID) {
+      winID
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listWins = /* GraphQL */ `
+  query ListWins(
+    $winID: String
+    $filter: ModelWinFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listWins(
+      winID: $winID
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        winID
+        name
         createdAt
         updatedAt
       }

@@ -66,6 +66,7 @@ export const onCreateSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -89,6 +90,7 @@ export const onUpdateSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -112,6 +114,7 @@ export const onDeleteSchoolSport = /* GraphQL */ `
       name
       entryType
       description
+      noWinsDescription
       school
       sport
       sportId
@@ -455,6 +458,36 @@ export const onDeleteImage = /* GraphQL */ `
       size
       type
       createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateWin = /* GraphQL */ `
+  subscription OnCreateWin($filter: ModelSubscriptionWinFilterInput) {
+    onCreateWin(filter: $filter) {
+      winID
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateWin = /* GraphQL */ `
+  subscription OnUpdateWin($filter: ModelSubscriptionWinFilterInput) {
+    onUpdateWin(filter: $filter) {
+      winID
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteWin = /* GraphQL */ `
+  subscription OnDeleteWin($filter: ModelSubscriptionWinFilterInput) {
+    onDeleteWin(filter: $filter) {
+      winID
+      name
       createdAt
       updatedAt
     }

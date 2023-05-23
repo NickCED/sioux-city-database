@@ -270,7 +270,7 @@ function App({ signOut }) {
             onFormSubmit={handleProfessionalSubmit}
             onFormCancel={handleProfessionalCancel}
             currentUser={currentUserName}
-            onCloseEntry={handleProfessionalCancel}
+            onCloseEdit={handleProfessionalCancel}
             data={editSportData}
           />
         )}

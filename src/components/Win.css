@@ -2,3 +2,6 @@
   content: '🏆';
   margin-right: 5px;
 }
+.win-autocomplete {
+  flex: 1 1 auto;
+}

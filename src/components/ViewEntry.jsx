@@ -222,40 +222,47 @@ export default function ViewEntry(props) {
           <Flex className='add-view-contents-2'>
             {/*====================================================================================================*/}
             {props.entry.entryType === 'School' && (
-              <Expander type='single' isCollapsible={true} width={'100%'}>
+              <Expander type='single' isCollapsible={true}>
                 <ExpanderItem title='Wins' value='item 1'>
                   {props.entry.wins ? (
                     <Flex
                       direction={'column'}
                       style={{
                         overflowY: 'auto',
-                        gap: '.35rem',
+                        gap: '.5rem',
+                        padding: '.75rem',
                       }}
                     >
-                      {wins.map((win) => (
-                        <Text
-                          key={win.id}
-                          className='win-text'
-                          style={{
-                            border: '1px solid rgb(112, 112, 112)',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            padding: '3px',
-                            width: '100%',
-                            borderRadius: '0.25rem',
-                            whiteSpace: 'wrap',
-                          }}
-                        >
-                          <span
-                            style={{
-                              color: 'rgb(176, 124, 2)',
-                              padding: '.5rem',
-                            }}
-                          >
-                            {win.year}
-                          </span>{' '}
-                          {win.text}
-                        </Text>
+                      {wins.map((win, index) => (
+                        <Expander type='multiple' isCollapsible={true}>
+                          <ExpanderItem
+                            title={
+                              <Text
+                                key={win.id}
+                                className='win-text'
+                                style={{
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  padding: '3px',
+                                  width: '100%',
+                                  borderRadius: '0.25rem',
+                                  whiteSpace: 'wrap',
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    color: 'rgb(176, 124, 2)',
+                                    padding: '.5rem',
+                                  }}
+                                >
+                                  {win.year}
+                                </span>{' '}
+                                {win.text}
+                              </Text>
+                            }
+                            value={`win-${index}`}
+                          ></ExpanderItem>
+                        </Expander>
                       ))}
                     </Flex>
                   ) : (
@@ -305,7 +312,14 @@ export default function ViewEntry(props) {
             )}
 
             <Expander type='single' isCollapsible={true} width={'100%'}>
-              <ExpanderItem title='Description' value='item 1'>
+              <ExpanderItem
+                title={
+                  props.entry.entryType === 'School'
+                    ? 'Without Wins Description'
+                    : 'Description'
+                }
+                value='item 1'
+              >
                 <Text
                   maxHeight={'35vh'}
                   style={{
