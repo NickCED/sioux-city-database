@@ -45,9 +45,11 @@ const updateProfessionalSportMutation = async (
           startYear:
             e.target.startYear.value === ''
               ? null
-              : props.data.startYear || null,
+              : e.target.startYear.value || props.data.startYear || null,
           endYear:
-            e.target.endYear.value === '' ? null : props.data.endYear || null,
+            e.target.endYear.value === ''
+              ? null
+              : e.target.endYear.value || props.data.endYear || null,
 
           description: e.target.description.value || '',
           notes: e.target.notes.value || '',

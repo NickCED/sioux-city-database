@@ -188,6 +188,7 @@ export default function EditProfessionalSport(props) {
                   selectName='endYear'
                   min={yearStart}
                   max={2023}
+                  active={true}
                   initYear={props.data.endYear || ''}
                   showChange={true}
                   onChange={onYearEndChange}

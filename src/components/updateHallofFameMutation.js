@@ -62,7 +62,9 @@ const updateHallOfFameMutation = async (
           inductionYear:
             e.target.inductionYear.value === ''
               ? null
-              : props.entry.inductionYear || null,
+              : e.target.inductionYear.value ||
+                props.entry.inductionYear ||
+                null,
           sport: sportType || props.entry.sport || '',
           description: e.target.description.value || '',
           notableAchievements: notableAchievements,

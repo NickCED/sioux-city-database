@@ -39,10 +39,14 @@ export default function FileBrowser({
     }
   }, []);
   useEffect(() => {
-    props.onFilesListChange(filesList);
+    if (props.onFilesListChange) {
+      props.onFilesListChange(filesList);
+    }
   }, [filesList]);
   useEffect(() => {
-    props.onDeletedFilesListChange(deleteFilesList);
+    if (props.onDeletedFilesListChange) {
+      props.onDeletedFilesListChange(deleteFilesList);
+    }
   }, [deleteFilesList]);
 
   const handleDelete = (imageID) => {

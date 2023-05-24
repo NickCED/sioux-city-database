@@ -39,9 +39,11 @@ const updateVenueMutation = async (
           startYear:
             e.target.startYear.value === ''
               ? null
-              : props.school.startYear || null,
+              : e.target.startYear.value || props.school.startYear || null,
           endYear:
-            e.target.endYear.value === '' ? null : props.school.endYear || null,
+            e.target.endYear.value === ''
+              ? null
+              : e.target.endYear.value || props.school.endYear || null,
 
           location: e.target.location.value || props.entry.location || '',
           description:
