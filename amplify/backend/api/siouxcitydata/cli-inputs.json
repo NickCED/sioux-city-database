@@ -7,14 +7,13 @@
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authsiouxcityupload9519fe5d"
     },
-    "conflictResolution": {
-      "defaultResolutionStrategy": {
-        "type": "NONE"
-      }
-    },
+    "conflictResolution": {},
     "additionalAuthTypes": [
       {
-        "mode": "AWS_IAM"
+        "mode": "API_KEY",
+        "expirationTime": 365,
+        "apiKeyExpirationDate": "2024-05-25T03:03:52.214Z",
+        "keyDescription": "SiouxCityKiosk"
       }
     ]
   }

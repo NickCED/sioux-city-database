@@ -14,7 +14,12 @@
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AWS_IAM"
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2024-05-25T03:03:52.214Z",
+                "apiKeyExpirationDays": 365,
+                "description": "SiouxCityKiosk"
+              },
+              "authenticationType": "API_KEY"
             }
           ],
           "defaultAuthentication": {
