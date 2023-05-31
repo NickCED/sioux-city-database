@@ -175,11 +175,11 @@ export default function AllEntries(props) {
         textAlign: 'center',
         minWidth: '70px',
         Cell: ({ row }) => {
-          const [deleteLoading, setDeleteLoading] = useState(false);
+          const [deleteLoading, setDeleteLoading] = useState(null);
           const confirmDelete = (e, entry) => {
             console.log('confirm delete');
             if (window.confirm('Are you sure you want to delete this entry?')) {
-              setDeleteLoading(true);
+              setDeleteLoading(entry.id);
               handleDeleteEntry(entry);
             }
           };
@@ -187,7 +187,7 @@ export default function AllEntries(props) {
             <Button
               border={'none'}
               id={row.original.id + 'button'}
-              isLoading={deleteLoading}
+              isLoading={deleteLoading === row.original.id}
               onClick={(e) => confirmDelete(e, row.original)}
             >
               <IoCloseOutline size={rowHeight} />
