@@ -9,6 +9,7 @@ import hockeyImage from '../images/hockey.png';
 import soccerImage from '../images/soccer.png';
 import softballImage from '../images/softball.png';
 import horseRacingImage from '../images/horseracing.png';
+import football from '../images/Football.png';
 
 import './ShowProfessionalSports.css';
 import { IoAddOutline, IoPencilOutline } from 'react-icons/io5';
@@ -26,6 +27,8 @@ export default function ShowProfessionalSports(props) {
         return basketballImage;
       case 'Boat Clubs':
         return boatingImage;
+      case 'Football':
+        return football;
       case 'Country Clubs':
         return countryClubImage;
       case 'Ice Hockey':
